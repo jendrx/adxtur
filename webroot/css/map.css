@@ -1,0 +1,175 @@
+.map-legend .swatch {
+    width:15px;
+    height:15px;
+    float:left;
+    margin-right:10px;
+}
+
+.col12   { width:100%; display:block; }
+pre.ui-distance {
+    position:absolute;
+    top:0%;
+    left:85%;
+    padding: 1%;
+    background:none;
+    font-size:11px;
+    line-height:28px;
+    border-radius:3px;
+}
+/* Pill wrapper for joining buttons. */
+.pill {
+    display:inline-block;
+}
+.pill > * {
+    border-radius:0 0 0 0;
+    border:0 solid white;
+    border-left-width:1px;
+}
+.pill > *:first-of-type {
+    border-radius:3px 0 0 3px;
+    border-left-width:0;
+}
+.pill > *:last-of-type {
+    border-radius:0 3px 3px 0;
+}
+.pill > *:only-child {
+    border-radius:3px;
+}
+
+.pill .button.stroke {
+    border: none;
+    box-shadow: 0px 0px 0px 2px #3887be inset;
+    border-right-width: 2px;
+    border-left-width: 0;
+}
+.pill .button.stroke:hover {
+    background-color: transparent;
+    color: #52a1d8;
+    box-shadow: 0px 0px 0px 2px #52a1d8 inset;
+}
+
+.pill .button.stroke:not(:first-of-type) {
+    margin-left: -2px;
+}
+
+/* Vertical pill if pill contents is full width */
+.pill > .col12 {
+    text-align: left;
+    border-bottom-width:1px;
+    border-left-width:0;
+}
+.pill > .button.stroke.col12:not(:first-of-type)  {
+    margin-left: 0px;
+    margin-top: -2px;
+}
+.pill > .col12:first-of-type {
+    border-radius:3px 3px 0 0;
+}
+.pill > .col12:last-of-type {
+    border-radius:0 0 3px 3px;
+}
+.pill > .col12:only-child,
+.pill > .col12:only-of-type {
+    border-radius: 3px;
+}
+
+.dark.fill-dark .pill > *   { border-color:#404040; }
+.fill-gray .pill > *,
+.fill-grey .pill > *        { border-color:#eee; }
+.fill-white .pill > *       { border-color:#fff; }
+.fill-light .pill > *       { border-color:#f8f8f8; }
+/* deprecated, use fill-cyan */
+.fill-blue-light .pill > *  { border-color:#52a1d8;}
+.fill-cyan .pill > *        { border-color:#3bb2d0;}
+.fill-blue .pill > *        { border-color:#3887be; }
+.fill-denim .pill > *       { border-color:#50667f; }
+.fill-navy .pill > *        { border-color:#28353d; }
+.fill-navy-dark .pill > *   { border-color:#222B30; }
+.fill-purple .pill > *      { border-color:#8a8acb; }
+.fill-midnight .pill > *    { border-color:#142736; }
+.fill-darkblue .pill > *    { background-color:#223b53; }
+.fill-red .pill > *         { background-color:#e55e5e; }
+.fill-teal .pill > *        { background-color:#41afa5; }
+.fill-pink .pill > *        { background-color:#ed6498; }
+.fill-mustard .pill > *     { background-color:#fbb03b; }
+
+.dark.fill-darken1 .pill > *,
+.dark.fill-darken2 .pill > *,
+.dark.fill-darken3 .pill > * {
+    border-color:#000;
+    border-color:rgba(0,0,0,0.5);
+}
+.fill-lighten1 .pill > *,
+.fill-lighten2 .pill > *,
+.fill-lighten3 .pill > * {
+    border-color:#fff;
+    border-color:rgba(255,255,255,0.5);
+}
+
+.pill > .stroke { box-shadow: 0px 0px 0px 2px #3887be inset; }
+.pill > .quiet.stroke { box-shadow: 0px 0px 0px 2px rgba(0,0,0,.25) inset; }
+.pill > .loud.stroke { box-shadow: 0px 0px 0px 2px #8889cc inset; }
+
+.dark .pill > .stroke { box-shadow: 0px 0px 0px 2px white inset; }
+.dark .pill > .stroke:hover { background-color: transparent; box-shadow: 0px 0px 0px 2px rgba(255,255,255,.5) inset; color: rgba(255,255,255,.75);}
+.dark .pill > .quiet.stroke { box-shadow: 0px 0px 0px 2px  rgba(255,255,255,.25) inset; }
+
+.pill input[type=text] {
+    border:1px solid rgba(0,0,0,0.1);
+    border-radius:0;
+}
+
+.pill input[type=text]:focus {
+    border:1px solid rgba(0,0,0,0.25);
+}
+
+/* Pill style for input followed by button */
+.input-pill input[type='text'],
+.input-pill input[type=text]:focus { border-right-width: 0;}
+
+.input-pill input[type='text'] + .button {
+    border-left-width: 0;
+    border-radius: 0 3px 3px 0;
+}
+
+/* make your pills toggles */
+.toggle * {
+    width:40px;
+    padding:0;
+    overflow:hidden;
+    white-space:nowrap;
+}
+.toggle .big.button.icon:not(.active) {
+    padding-left:0;
+}
+.toggle .active {
+    background:#52a1d8;
+    color:rgba(255,255,255,0.75);
+    padding:10px;
+    width:auto;
+    color:#cdecf3;
+}
+
+/* Rounded toggle for filtering/modifying lists */
+.rounded-toggle {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 2px;
+    border-radius: 15px;
+    vertical-align: middle;
+    background: rgba(0,0,0,.1)
+}
+
+.dark .rounded-toggle { background: rgba(255,255,255,.1);}
+
+.rounded-toggle > * {
+    cursor:pointer;
+    vertical-align: top;
+    display: inline-block;
+    border-radius: 16px;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: rgba(0,0,0,0.5);
+    line-height: 20px;
+}
+
