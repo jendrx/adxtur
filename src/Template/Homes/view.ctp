@@ -124,12 +124,6 @@
 
 </script>
 <div class="row-fluid">
-    <!--<label>Cenários </label>
-    <div class="btn-group" role="group" aria-label="...">
-        <button type="button" class="btn btn-default">Left</button>
-        <button type="button" class="btn btn-default">Middle</button>
-        <button type="button" class="btn btn-default">Right</button>
-    </div>-->
     <div class="col-md-2">
         <h4> Ano de referência 2040</h4>
         <div class="row" >
@@ -234,11 +228,8 @@
     </table>
 
     <br>
-
     <p align="center">
-
         <input id="calc_politic_tax" class="button" type="button" value="Calcular">
-
     </p>
 	</div>
 </div>
