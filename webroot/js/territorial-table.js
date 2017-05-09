@@ -4,23 +4,23 @@
 function get_table_data() {
     var table_values = [];
     $("#table_territorials tbody").find("tr").each(function () {
-
+        var $l_input = $(this).find(".label_input");
             table_values.push({
-                id: $(this).find(".label_input").attr('value'),
-                tax_rehab: $(this).find("#tax_rehab_input").val(),
-                tax_construction: $(this).find("#tax_construct_input").val(),
+                id: $l_input.attr('value'),
+                territory:  $l_input.text(),
+                tax_rehab: $(this).find(".tax_rehab_input").val(),
+                tax_construction: $(this).find(".tax_cons_input").val(),
                 tax_demolition: null
             });
         }
     );
-    console.log(table_values);
     return table_values;
 }
 
 function load_table_data(data, type_admin) {
 
-    var construct_input = '<input  id="tax_construct_input" class="tax_input text-right" type="number"  min="0" value="0" max="10" step="0.5" />'
-    var rehab_input = '<input  id=tax_rehab_input class="tax_input text-right" type="number" min="0" value="0" max="10" step="0.5" />'
+    var construct_input = '<input  id="tax_construct_input" class="tax_input" style="height: auto;" type="number"  min="0" value="0" max="10" step="0.5" />'
+    var rehab_input = '<input  id=tax_rehab_input class="tax_input" style="height: auto;" type="number" min="0" value="0" max="10" step="0.5" />'
 
 
     //choose table's header
@@ -30,40 +30,19 @@ function load_table_data(data, type_admin) {
 
 
     // populate rows
-    $.each(data, function (key, value) {
-        $("#table_territorials > tbody:last-child").append('<tr><td><label class = "label_input" value="' + value["id"] + '">' + value['name'] + '</td><td>' + construct_input + ' </td><td>' + rehab_input + '</td></tr>')
-    });
 
+    $.each(data, function (key,value) {
+        var $cons_input  = $('<input>', {"class":"tax_cons_input","type":"number","min":0,"max":10, "step":0.5, "value":value['tax_construction']});
+        var $rehab_input = $('<input>', {"class":"tax_rehab_input","type":"number","min":0,"max":10, "step":0.5, "value":value['tax_construction']});
+        $("#table_territorials > tbody:last-child").append('<tr><td><label class = "label_input" value="' + value["id"] + '">' + value['territory'] + '</td>' +
+            '<td>' + $cons_input.prop('outerHTML') + ' </td><td>' + $rehab_input.prop('outerHTML') + '</td></tr>')
+    });
 }
 
-
-
-function get_parishes(data,municipality) {
-    var parishes = []
-    $.each(data, function(key,value)
+function remove_table_rows(table_id) {
+    $('#'+table_id).find('tr').each( function()
     {
-        if(data[key].municipality === municipality && data[key].admin_type === 'parish' ) {
-            parishes.push(data[key])
-        }
-    });
-    return parishes;
-}
-
-function get_municipalities(data) {
-    var parishes = []
-    $.each(data, function(key,value)
-    {
-        if(data[key].admin_type === 'municipality' ) {
-            parishes.push(data[key])
-        }
-    });
-    return parishes;
-}
-
-function filter_table_data(data,admin_type,municipality) {
-
-    if(municipality === null)
-        return get_municipalities(data);
-    return get_parishes(data,municipality);
+        $(this).remove();
+    })
 
 }

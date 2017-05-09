@@ -6,16 +6,9 @@ var legend = getLegendHTML();
 var legendAlternate = getLegendHTML_alternate();
 var showLegend = false;
 
-
-function ddown_val()
-{
-    return $("#sel_politics").val();
-}
 function activate(btn) {
     var selection = document.getElementById(btn);
     selection.style.backgroundColor = "activecaption";
-    //getTerritorialLayer(1,1,1,"");
-    //selection.style.border = "activeborder";
     selection.style.color = "darkblue";
 }
 
@@ -32,15 +25,11 @@ function view1() {
     activate("view1");
     selected = "view1";
 
-    //console.log(locals)
-    console.log("diss" + map.featureLayer.getGeoJSON());
-
     if (map.hasLayer(featureLayer))
     {
         restyleLayer(featureLayer);
     }
 
-    //refreshLayerAroundViews();
     if (showLegend === false) {
         map.legendControl.removeLegend(legendAlternate);
         map.legendControl.addLegend(legend);

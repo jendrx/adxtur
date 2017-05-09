@@ -44,6 +44,8 @@ class CalcsController extends AppController
         //merge territories with taxes
         $merged = $this->mergeTaxTerritory($territories,$taxes);
 
+        //echo json_encode($global_actual);
+
         $locals = $this->getLocalsPredict($merged,$global_actual);
 
         $global_predict = $this->getGlobalsPredict($merged,$global_actual);
@@ -130,29 +132,6 @@ class CalcsController extends AppController
         foreach($merged as $territory)
         {
 
-            /* if($territory['id'] == 411)
-             {
-                 echo  "fomula 1 \t" .($this->result1($merged)). "\r\n";
-                 echo "fomula 2 \t" .($this->formula2($territory)). "\r\n";
-                 echo "fomula 3 \t" .($this->formula3($territory)). "\r\n";
-                 //echo "fomula 4 \t" .($this->formula4($territory)). "\r\n";
-                 echo "fomula 5 \t" .($this->formula5($territory)). "\r\n";
-                 echo "fomula 6 \t" .($this->formula6($territory)). "\r\n";
-                 echo "fomula 8 \t" .($this->formula8($territory)). "\r\n";
-                 echo "fomula 9 \t" .($this->formula9($territory)). "\r\n";
-
-
-                 //echo "fomula 2 \t" .($this->formula2($territory)). "\r\n";
-
-                 echo "fomula 10 \t" .($this->formula10($territory)). "\r\n";
-                 echo "fomula 11 \t" .($this->formula11($territory,$merged,$global_actual)). "\r\n";
-                 echo "formula 13 \t" .($this->formula13($territory,$merged,$global_actual)). "\r\n";
-                 //echo "fomula 13 \t" .($this->result13($merged,$global_actual)). "\r\n";
-
-
-
-             }*/
-
             array_push($local, (array("id" => $territory['id'],"name" => $territory['name'],"predict_tax_period_variance_lodges" => $this->getPredictedPeriodLodgeVariance($territory),
                 "predicted_tax_anual_mean_lodges" => $this->getPredictedAnualMeanLodgeVariance($territory),
                 "predicted_first_lodges" => $this->getPredictedFirstLodge($territory),
@@ -170,12 +149,14 @@ class CalcsController extends AppController
 
     private function getPredictedMeanTaxConstruction($territories,$global_actual)
     {
-        return pow(($this->result3($territories) / ($global_actual['actual_lodges'] + $this->result1($territories) )), 1/29) -1;
+        $result = pow(($this->result3($territories) / ($global_actual['actual_lodges'] + $this->result1($territories) )), 1/29) -1;
+        return $result;
     }
 
     private function getPredictedMeanTaxRehab($territories,$actual_globals)
     {
-        return  1 - pow(($this->result6($territories) / ($actual_globals['total_actual_empty_rehab_lodges'])),(1/29)) ;
+        $result = 1 - pow(($this->result6($territories) / ($actual_globals['total_actual_empty_rehab_lodges'])),(1/29)) ;
+        return $result;
     }
 
     private function getPredictedPeriodLodgeVariance($territory)
@@ -568,25 +549,6 @@ class CalcsController extends AppController
         unset($value);
 
         return $final;
-    }
-
-
-
-
-    public function isLeaf()
-    {
-        $params = $this->request->getQueryParams();
-        $territory_id = $params['territory_id'];
-        $domain_id = $params['domain_id'];
-
-        $this->loadModel('TerritoriesDomains');
-        $this->loadModel('Domains');
-
-        $levels = $this->Domains->get($domain_id,['contain' => ['Types']]);
-
-        echo json_encode($levels);
-
-
     }
 
 }

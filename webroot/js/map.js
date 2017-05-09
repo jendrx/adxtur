@@ -7,13 +7,12 @@ var featureLayer;
 var L;
 var locals;
 
-function createMap(){
+function createMap(start_view){
     L.mapbox.accessToken = 'pk.eyJ1Ijoiam9zZW1vcmVpcmEiLCJhIjoiUmRYelFJQSJ9.-Cm5qED-S78cnOPy5g4IOQ';
     map = L.mapbox.map('map', 'josemoreira.o2hel2eo')
-        .setView([40.50, -8.68], 12);
+        .setView(start_view, 10);
 
 }
-
 
 function getStyle(feature) {
     return {
@@ -124,8 +123,7 @@ function displayParque(layer) {
 
 }
 
-function displayPopulacao(layer)
-{
+function displayPopulacao(layer) {
 
     var territory = get_territory(layer.feature.properties.id);
 
@@ -136,15 +134,11 @@ function displayPopulacao(layer)
     return htmlContent;
 }
 
-function displayNecessidades(layer)
-{
+function displayNecessidades(layer) {
     var territory = get_territory(layer.feature.properties.id);
 
     var htmlContent = '<p><b>' + territory.name +'</b></p>';
     htmlContent += '<p><font size="2">Alojamentos ocupados necessários: ' + Math.round(territory.predicted_required_lodges) + '</font></p>';
-
-//    htmlContent += '<p><font size="2">Necessidades (hab/aloj ocupado): ' + Math.round(result13()) + '</font></p>';
-
     return htmlContent;
 }
 
@@ -223,11 +217,9 @@ function refreshLocalLayer(data) {
 
 }
 
-function restyleLayer(layer)
-{
+function restyleLayer(layer) {
     layer.eachLayer(function (layer) {
         layer.setStyle(getStyle(layer.feature));
-        console.log(layer.feature.properties.id);
     });
 
 }

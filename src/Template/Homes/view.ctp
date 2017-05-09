@@ -129,15 +129,7 @@
 			<div class="col-md-3">
                 <?= $this->Form->control('Studies', array('type' => 'select', 'options' => $studies, 'style' => 'height:auto', 'id' => 'sel_studies')) ?>
 			</div>
-			<div class="col-md-3">
-                <?= $this->Form->control('TestSS', array('class' => 'button', 'id' => 'sel_test')) ?>
-			</div>
-			<!--<div class="col-md-3">
-		    <?= $this->Form->control('Types', array('type' => 'select', 'options' => $types, 'style' => 'height:auto', 'id' => 'sel_types')) ?>
-	    </div>
-	    <div class="col-md-3">
-		    <?= $this->Form->control('Features', array('type' => 'select', 'options' => $features, 'style' => 'height:auto', 'id' => 'sel_features')) ?>
-	    </div>-->
+
 		</div>
 
 	</div>
