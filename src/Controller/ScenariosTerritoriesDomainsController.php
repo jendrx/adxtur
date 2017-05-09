@@ -84,10 +84,7 @@ class ScenariosTerritoriesDomainsController extends AppController
             echo json_encode($data);
             foreach($data as $key=> $value)
             {
-                //$query = $this->ScenariosTerritoriesDomains->find('all',['conditions' => ['scenario_id = ' => $scenario_id, 'territory_domain_id = ' => $key]]);
-
                 $scenariosTerritoriesDomain = $this->ScenariosTerritoriesDomains->newEntity();
-
                 $scenariosTerritoriesDomain->territory_domain_id = $key;
                 $scenariosTerritoriesDomain->scenario_id = $scenario_id;
                 $scenariosTerritoriesDomain->closed_population = $value['closed_population'];
@@ -110,8 +107,6 @@ class ScenariosTerritoriesDomainsController extends AppController
             }
             $this->Flash->error(__('The scenarios parameters could not be saved. Please, try again.'));
         }
-
-        //echo json_encode($territories);
 
         $this->set(compact('territories','scenario_id'));
         $this->set('_serialize', ['territories','scenario_id']);

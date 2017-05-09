@@ -15,6 +15,7 @@ echo $this->fetch('script');
 echo $this->Html->charset();
 echo $this->Html->css('base.css');
 //echo $this->Html->css('cake.css');
+//echo $this->Html->css('home.css');
 
 echo $this->Html->css('//api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.css');
 echo $this->Html->css('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');

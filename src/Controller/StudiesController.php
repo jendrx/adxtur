@@ -72,16 +72,10 @@ class StudiesController extends AppController
         $this->loadModel('TerritoriesDomains');
         $this->loadModel('Rules');
 
-        //$q_territories_domains = $this->TerritoriesDomains->find('all',['conditions' => ['domain_id = ' => $domain_id],'fields'=>['id','domain_id','territory_id']]);
-
-
         $study = $this->Studies->newEntity();
         if ($this->request->is('post')) {
 
             $study->domain_id = $domain_id;
-
-            //$study->territories_domains = $q_territories_domains->toArray();
-
             $study = $this->Studies->patchEntity($study, $this->request->getData());
 
             if ($this->Studies->save($study)) {

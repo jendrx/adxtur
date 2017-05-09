@@ -77,7 +77,7 @@
 		        <?= $this->Form->button(__('Submit'), ['class' => 'button']) ?>
                 <?= $this->Form->end() ?>
 
-				<!--<div class="row well">
+			<!--<div class="row well">
 			<div class="col-md-6">
                 <?php
                 echo $this->Form->control('features._ids', ['options' => $features]);

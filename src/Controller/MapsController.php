@@ -15,45 +15,45 @@ class MapsController extends AppController
 
     public function getTerritorialLayer()
     {
-        $query_params = $this->request->getQueryParams();
-
-        $municipality = $query_params['municipality'];
-
-        $types = $query_params['types'];
-
-        $admin_type = $query_params['admin_type'];
-
-        $id = $query_params['domain'];
-
         $this->loadModel('Domains');
 
-        if ($types > 1)
+        $query_params = $this->request->getQueryParams();
+
+        $parent = $query_params['parent'];
+
+        $levels = $query_params['level'];
+
+        $domain_id = $query_params['domain'];
+
+
+
+        $conditions = array();
+        if ($levels > 1)
         {
-            if('municipality' == $admin_type)
+            if($parent == null)
             {
-                $q_territorials = $this->Domains->find('all',['conditions' => ['id = ' => $id]])->select([])
-                    ->contain(['Territories' => ['conditions' => ['admin_type = ' => 'municipality' ],'fields' => ['TerritoriesDomains.domain_id','geom_geoJson']]]);
+                $conditions = array('parish is null');
+
+                //$q_territorials = $this->Domains->find('all',['conditions' => ['id = ' => $domain_id]])->select([])
+                  //  ->contain(['Territories' => ['conditions' => ['admin_type = ' => 'municipality' ],'fields' => ['TerritoriesDomains.domain_id','geom_geoJson']]]);
 
             }
             else
             {
-                $q_territorials = $this->Domains->find('all',['conditions' => ['id = ' => $id]])->select([])
-                    ->contain(['Territories' => ['conditions' => ['admin_type = ' => 'parish', 'municipality = ' => $municipality ],'fields' => ['TerritoriesDomains.domain_id','geom_geoJson']]]);
+                $conditions = array('parish is not null', 'parent_id' => $parent);
+
+                //$q_territorials = $this->Domains->find('all',['conditions' => ['id = ' => $domain_id]])->select([])
+                //    ->contain(['Territories' => ['conditions' => ['admin_type = ' => 'parish', 'municipality = ' => $municipality ],'fields' => ['TerritoriesDomains.domain_id','geom_geoJson']]]);
 
             }
         }
-        else
-        {
-            $q_territorials = $this->Domains->find('all',['conditions' => ['id = ' => $id]])->select([])
-                ->contain(['Territories' => ['fields' => ['TerritoriesDomains.domain_id','geom_geoJson']]]);
-        }
+        $q_territorials = $this->Domains->find('all',['conditions' => ['id = ' => $domain_id]])->select([])
+            ->contain(['Territories' => ['fields' => ['TerritoriesDomains.domain_id','geom_geoJson'],'conditions' => $conditions]]);
 
         $spots_geoJSON = array();
 
         // iterate over spots
 
-
-        //echo json_encode($q_territorials->toArray());
         foreach ($q_territorials as $territorials_info )
         {
 

@@ -47,17 +47,21 @@ class DomainsController extends AppController
      */
     public function add()
     {
+        $this->loadModel('Types');
+        $this->loadModel('TypesDomains');
+
         $domain = $this->Domains->newEntity();
         if ($this->request->is('post')) {
             $data = $this->request->getData();
+
             $domain = $this->Domains->patchEntity($domain, $data);
 
             if ($this->Domains->save($domain)) {
 
+                $types = $this->getTypes($domain->id);
                 $update_domain = $this->Domains->get($domain->id);
-
-                $update_domain->type = $this->countTerritoryType($domain->id);
-
+                $update_domain->type = count($types);
+                $update_domain->types = $types;
                 $this->Domains->save($update_domain);
                 $this->Flash->success(__('The domain has been saved.'));
 
@@ -153,6 +157,27 @@ class DomainsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+
+    public function getTypes($id = null)
+    {
+        $this->loadModel('Types');
+        $this->loadModel('TerritoriesDomains');
+        $territories = $this->TerritoriesDomains->find('all', array('conditions' => array('domain_id = ' => $id)))->contain(array('Territories' => ['fields' => array('code')]))->select('Territories.code');
+        $arr_territories = $territories->toArray();
+        $uniques = array_unique($arr_territories);
+        $types = array();
+
+        foreach ($uniques as $unique)
+        {
+            $key = $this->Types->find()->where(['code = ' => $unique->Territories->code ])->first();
+
+            array_push($types,$key);
+        }
+
+        return $types;
+
+    }
+
     public function countTerritoryType($id = null)
     {
         $this->loadModel('TerritoriesDomains');
@@ -160,6 +185,8 @@ class DomainsController extends AppController
 
         $arr_territories = $territories->toArray();
 
-        return count(array_unique($arr_territories));
+        return (array_unique($arr_territories));
     }
+
+
 }
