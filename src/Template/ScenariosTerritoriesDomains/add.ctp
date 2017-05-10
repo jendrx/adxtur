@@ -40,6 +40,9 @@
             <?= $this->Form->button(__('Submit'), ['class' => 'button','style'=>'float:right']) ?>
             <?= $this->Form->end() ?>
 		</div>
+
+    <?= $this->Form->button(__('Submit'), ['class' => 'button','style'=>'float:right']) ?>
+    <?= $this->Form->end() ?>
 </div>
 
 

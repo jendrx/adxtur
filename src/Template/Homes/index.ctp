@@ -37,6 +37,13 @@
 
 
     <?php endforeach; ?>
+
+	<div id="upload_div">
+		<?= $this->Form->create('',['id' => 'scenario_add_form', 'encType' => 'multipart/form-data'])?>
+        <?=$this->Form->control('file',['type' => 'file'])?>
+        <?= $this->Form->button(__('Submit'), ['class' => 'button','style'=>'float:right']) ?>
+        <?= $this->Form->end() ?>
+	</div>
 </div>
 
 

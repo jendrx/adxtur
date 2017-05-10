@@ -68,7 +68,6 @@ class ScenariosTerritoriesDomainsController extends AppController
 
         $this->loadModel('Scenarios');
         $this->loadModel('TerritoriesDomains');
-        //$this->loadModel('Domains');
 
         $scenario_info = $this->Scenarios->get($scenario_id);
         $domain_id = $scenario_info->domain_id;
@@ -82,6 +81,7 @@ class ScenariosTerritoriesDomainsController extends AppController
             $data = $this->request->getData();
 
             echo json_encode($data);
+
             foreach($data as $key=> $value)
             {
                 $scenariosTerritoriesDomain = $this->ScenariosTerritoriesDomains->newEntity();
@@ -100,11 +100,11 @@ class ScenariosTerritoriesDomainsController extends AppController
                 }
             }
 
-            if ($all_saved) {
+            /*if ($all_saved) {
                 $this->Flash->success(__('The scenarios territorials domain has been saved.'));
 
                 return $this->redirect(['controller' => 'Domains','action' => 'view', $domain_id]);
-            }
+            }*/
             $this->Flash->error(__('The scenarios parameters could not be saved. Please, try again.'));
         }
 
