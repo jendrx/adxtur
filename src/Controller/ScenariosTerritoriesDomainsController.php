@@ -51,21 +51,6 @@ class ScenariosTerritoriesDomainsController extends AppController
      */
     public function add($scenario_id)
     {
-        /*$scenariosTerritoriesDomain = $this->ScenariosTerritoriesDomains->newEntity();
-        if ($this->request->is('post')) {
-            $scenariosTerritoriesDomain = $this->ScenariosTerritoriesDomains->patchEntity($scenariosTerritoriesDomain, $this->request->getData());
-            if ($this->ScenariosTerritoriesDomains->save($scenariosTerritoriesDomain)) {
-                $this->Flash->success(__('The scenarios territories domain has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The scenarios territories domain could not be saved. Please, try again.'));
-        }
-        $territoriesDomains = $this->ScenariosTerritoriesDomains->TerritoriesDomains->find('list', ['limit' => 200]);
-        $scenarios = $this->ScenariosTerritoriesDomains->Scenarios->find('list', ['limit' => 200]);
-        $this->set(compact('scenariosTerritoriesDomain', 'territoriesDomains', 'scenarios'));
-        $this->set('_serialize', ['scenariosTerritoriesDomain']);*/
-
         $this->loadModel('Scenarios');
         $this->loadModel('TerritoriesDomains');
 
@@ -73,7 +58,8 @@ class ScenariosTerritoriesDomainsController extends AppController
         $domain_id = $scenario_info->domain_id;
 
         $territories = $this->TerritoriesDomains->find('all',['conditions' => ['domain_id = ' => $domain_id ]])
-            ->contain(['Territories' => ['fields' => ['name']]]);
+            ->contain(['Territories' => ['fields' => ['name','dicofre']]]);
+
 
         $all_saved = true;
         if ($this->request->is('post')) {
@@ -82,7 +68,7 @@ class ScenariosTerritoriesDomainsController extends AppController
 
             echo json_encode($data);
 
-            foreach($data as $key=> $value)
+            /*foreach($data as $key=> $value)
             {
                 $scenariosTerritoriesDomain = $this->ScenariosTerritoriesDomains->newEntity();
                 $scenariosTerritoriesDomain->territory_domain_id = $key;
@@ -98,7 +84,7 @@ class ScenariosTerritoriesDomainsController extends AppController
                 {
                     break;
                 }
-            }
+            }*/
 
             /*if ($all_saved) {
                 $this->Flash->success(__('The scenarios territorials domain has been saved.'));
@@ -157,5 +143,81 @@ class ScenariosTerritoriesDomainsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function addUploaded($scenario_id = null)
+    {
+        $this->loadModel('Scenarios');
+        $this->loadModel('TerritoriesDomains');
+
+        $scenario_info = $this->Scenarios->get($scenario_id);
+        $domain_id = $scenario_info->domain_id;
+
+        $territories = $this->TerritoriesDomains->find('all',['conditions' => ['domain_id = ' => $domain_id ]])
+            ->contain(['Territories' => ['fields' => ['name','dicofre']]]);
+        if($this->request->is('post'))
+        {
+            $toSave = array();
+            $data = $this->request->getData();
+            $url = $this->uploadFile('uploads',$data['file'],null);
+            if( $url == null)
+            {
+                $this->Flash->error(__('There\'s something wrong with upload'));
+                return $this->redirect(['action' => 'add', $scenario_id]);
+            }
+
+            $csvData = $this->ScenariosTerritoriesDomains->importCsv($url);
+
+            foreach ($territories as $territory)
+            {
+                $params = $this->getCsvParams($territory->territory->dicofre,$csvData);
+
+                if ($params == null)
+                {
+                    $this->Flash->error(__('There\'s something wrong with csv content'));
+                    return $this->redirect(['action' => 'add', $scenario_id]);
+
+                }
+
+                $scenariosTerritoriesDomain = $this->ScenariosTerritoriesDomains->newEntity();
+                $scenariosTerritoriesDomain->territory_domain_id = $territory->id;
+                $scenariosTerritoriesDomain->scenario_id = $scenario_id;
+                $scenariosTerritoriesDomain->closed_population = $params['closed_population'];
+                $scenariosTerritoriesDomain->migrations = $params['migrations'];
+                $scenariosTerritoriesDomain->total_population = $params['total_population'];
+                $scenariosTerritoriesDomain->habitants_per_lodge = $params['habitants_per_lodge'];
+                $scenariosTerritoriesDomain->actual_total_population = $params['actual_total_population'];
+
+                array_push($toSave,$scenariosTerritoriesDomain);
+            }
+            if(!$this->ScenariosTerritoriesDomains->saveMany($toSave))
+            {
+                $this->Flash->error(__('Parameters cannot be saved'));
+                return $this->redirect(['action' => 'add', $scenario_id]);
+            }
+
+            //echo json_encode($toSave);
+
+            $this->Flash->success(__('Scenario parameters saved!'));
+            return $this->redirect(['controller' => 'Domains','action' => 'view', $domain_id]);
+        }
+
+
+
+    }
+
+
+    public function getCsvParams($id,$csv)
+    {
+        $params = null;
+        foreach($csv as $row)
+        {
+            if($row['id'] == $id)
+            {
+                $params = $row;
+                return $params;
+            }
+        }
+        return $params;
     }
 }

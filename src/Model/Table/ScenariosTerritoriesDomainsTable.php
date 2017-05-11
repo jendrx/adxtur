@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+require (ROOT.DS.'vendor'.DS.'proloser'.DS.'cakephp-csv'.DS.'src'.DS.'Model'.DS.'Behavior'.DS.'CsvBehavior.php');
 
 /**
  * ScenariosTerritoriesDomains Model
@@ -20,6 +21,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\ScenariosTerritoriesDomain[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\ScenariosTerritoriesDomain findOrCreate($search, callable $callback = null, $options = [])
  */
+
+
 class ScenariosTerritoriesDomainsTable extends Table
 {
 
@@ -31,6 +34,7 @@ class ScenariosTerritoriesDomainsTable extends Table
      */
     public function initialize(array $config)
     {
+
         parent::initialize($config);
 
         $this->setTable('scenarios_territories_domains');
@@ -43,6 +47,21 @@ class ScenariosTerritoriesDomainsTable extends Table
         $this->belongsTo('Scenarios', [
             'foreignKey' => 'scenario_id'
         ]);
+
+        $options = array(
+            // Refer to php.net fgetcsv for more information
+            'length' => 0,
+            'delimiter' => ';',
+            'enclosure' => '"',
+            'escape' => '\\',
+            // Generates a Model.field headings row from the csv file
+            'headers' => true,
+            // If true, String $content is the data, not a path to the file
+            'text' => false,
+        );
+
+        $this->addBehavior('CakePHPCSV.Csv',$options);
+
     }
 
     /**

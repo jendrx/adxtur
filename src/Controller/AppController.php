@@ -66,4 +66,29 @@ class AppController extends Controller
             $this->set('_serialize', true);
         }
     }
+
+    public function uploadFile($folder, $formdata, $itemId = null)
+    {
+        $allowed_type = 'text/csv';
+        $folder_url = WWW_ROOT.$folder;
+        $success= false;
+        $rel_url = $folder;
+        $result = null;
+        $filename = str_replace(' ', '_', $formdata['name']);
+
+        if ($formdata['error'] == 0  && $formdata['type'] == $allowed_type) {
+            if (!file_exists($folder_url.DS.$filename)) {
+                $full_url = $folder_url.DS.$filename;
+                $url = $rel_url.'/'.$filename;
+                $success = move_uploaded_file($formdata['tmp_name'], $full_url);
+            }
+        }
+
+        if ($success) {
+            $result = $full_url;
+        }
+
+        return $result;
+
+    }
 }

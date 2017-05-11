@@ -12,12 +12,20 @@ class HomesController extends AppController
 {
     public function index()
     {
+        $this->loadModel('ScenariosTerritoriesDomains');
 
         if($this->request->is('post'))
         {
             $data = $this->request->getData();
 
-            echo ($this->uploadFile('uploads',$data['file'],null));
+            $file_url = $this->uploadFile('uploads',$data['file'],null);
+
+            $data = ($this->ScenariosTerritoriesDomains->importCsv($file_url,['id','actual_total_population','closed_population','migrations','total_population','habitants_per_lodge']));
+
+            foreach($data as $row)
+            {
+                echo json_encode($row);
+            }
 
         }
 
@@ -157,39 +165,5 @@ class HomesController extends AppController
 
     }
 
-
-    public function uploadFile($folder, $formdata, $itemId = null)
-    {
-        $folder_url = WWW_ROOT.$folder;
-
-        $success= false;
-
-        echo WWW_ROOT;
-        $rel_url = $folder;
-
-        $result = '';
-
-        $filename = str_replace(' ', '_', $formdata['name']);
-
-        // add permited types
-
-        //case switch
-
-        if ($formdata['error'] == 0) {
-            // check if file_exists
-            if (!file_exists($folder_url.DS.$filename)) {
-                $full_url = $folder_url.DS.$filename;
-                $url = $rel_url.'/'.$filename;
-                $success = move_uploaded_file($formdata['tmp_name'], $full_url);
-            }
-        }
-
-        if ($success) {
-            $result = $url;
-        }
-
-        return $result;
-
-    }
 
 }
