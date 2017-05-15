@@ -9,8 +9,7 @@ use App\Model\Entity\TerritoriesDomain;
  *
  * @property \App\Model\Table\StudiesRulesTerritoriesDomainsTable $StudiesRulesTerritoriesDomains
  */
-class StudiesRulesTerritoriesDomainsController extends AppController
-{
+class StudiesRulesTerritoriesDomainsController extends AppController{
 
     /**
      * Index method
@@ -66,8 +65,8 @@ class StudiesRulesTerritoriesDomainsController extends AppController
 
         if ($this->request->is('post')) {
 
+            $toSave = array();
             $data = $this->request->getData();
-            //echo json_encode($data);
             $saved = true;
             foreach ($data as $key=>$value)
             {
@@ -86,13 +85,16 @@ class StudiesRulesTerritoriesDomainsController extends AppController
 
                     }*/
 
-                   $saved = $this->StudiesRulesTerritoriesDomains->save($studiesRulesTerritoriesDomain);
+                    array_push($toSave,$studiesRulesTerritoriesDomain);
+
+
+                   /*$saved = $this->StudiesRulesTerritoriesDomains->save($studiesRulesTerritoriesDomain);
                     if (!$saved)
-                        break;
+                        break;*/
                 }
             }
             //if all saved
-            if($saved)
+            if($this->StudiesRulesTerritoriesDomains->saveMany($toSave))
             {
                 $this->Flash->success(__('The studies rules territories domain has been saved.'));
 
@@ -416,5 +418,52 @@ class StudiesRulesTerritoriesDomainsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+
+    public function updateTaxes()
+    {
+        $message = 'This request is not available';
+
+        if($this->request->is(['ajax','post','put']))
+        {
+            $toSave = array();
+            $this->loadModel('StudiesTerritoriesDomains');
+            $this->loadModel('Studies');
+            $data = $this->request->getData();
+            $study_id = $data['study'];
+
+            $study_info = $this->Studies->get($study_id);
+            $territories_taxes = $data['table_data'];
+
+
+            foreach($territories_taxes as $territory_tax)
+            {
+                $territoryDomain = $this->StudiesTerritoriesDomains->TerritoriesDomains->find('all',
+                    ['conditions' => ['domain_id = ' => $study_info->domain_id,'territory_id = ' => $territory_tax['id']]]);
+
+                $studiesTerritoriesDomainsInfo = $this->StudiesTerritoriesDomains->find('all',
+                    ['conditions' =>['study_id = ' => $study_id,'territory_domain_id = ' => $territoryDomain->select('id')->first()->id]]);
+
+                $updated_taxes = array('tax_rehab' => $territory_tax['tax_rehab'], 'tax_construction' => $territory_tax['tax_construction']);
+
+                $studiesTerritoriesDomains = $this->StudiesTerritoriesDomains->get($studiesTerritoriesDomainsInfo->select('id')->first()->id);
+                $studiesTerritoriesDomains = $this->StudiesTerritoriesDomains->patchEntity($studiesTerritoriesDomains,$updated_taxes);
+
+                array_push($toSave,$studiesTerritoriesDomains);
+
+            }
+
+            if($this->StudiesTerritoriesDomains->saveMany($toSave))
+                $message = 'Taxes has been updated';
+            else
+                $message = 'Taxes has not been updated';
+
+        }
+
+        $this->set(compact('message'));
+        $this->set('_serialize',['message']);
+
+
     }
 }

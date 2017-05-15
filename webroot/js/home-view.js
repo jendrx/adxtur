@@ -4,10 +4,7 @@
 
 var response;
 
-function newcalc(domain_id,politic_id,scenario_id,levels,parent_id) {
-    var taxes = get_table_data();
-
-    console.log(taxes);
+function newcalc(domain_id,politic_id,scenario_id,taxes,levels,parent_id) {
     get_territorial_results(domain_id,politic_id,scenario_id,taxes,levels,parent_id);
 }
 
@@ -117,8 +114,6 @@ function getTerritorialLayer(domain_id,levels,parent) {
 }
 
 function get_territorial_results(domain_id,politic_id,scenario_id,taxes,levels,parent_id) {
-
-    console.log(taxes);
     $.ajax(
         {
             type: 'get',
@@ -157,6 +152,5 @@ function init(data) {
     var parent = null;
     var study_id = $("#sel_studies").val();
     var scenario_id = $('#sel_scenarios').val();
-
     get_politic_taxes(study_id,levels,parent);
 }

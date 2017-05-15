@@ -63,12 +63,12 @@ class ScenariosTerritoriesDomainsController extends AppController
 
         $all_saved = true;
         if ($this->request->is('post')) {
-
+            $toSave = array();
             $data = $this->request->getData();
 
             echo json_encode($data);
 
-            /*foreach($data as $key=> $value)
+            foreach($data as $key=> $value)
             {
                 $scenariosTerritoriesDomain = $this->ScenariosTerritoriesDomains->newEntity();
                 $scenariosTerritoriesDomain->territory_domain_id = $key;
@@ -79,18 +79,20 @@ class ScenariosTerritoriesDomainsController extends AppController
                 $scenariosTerritoriesDomain->habitants_per_lodge = $value['habitants_per_lodge'];
                 $scenariosTerritoriesDomain->actual_total_population = $value['actual_total_population'];
 
-                $all_saved = $this->ScenariosTerritoriesDomains->save($scenariosTerritoriesDomain);
+                /*$all_saved = $this->ScenariosTerritoriesDomains->save($scenariosTerritoriesDomain);
                 if (!$all_saved)
                 {
                     break;
-                }
-            }*/
+                }*/
 
-            /*if ($all_saved) {
+                array_push($toSave,$scenariosTerritoriesDomain);
+            }
+
+            if($this->ScenariosTerritoriesDomains->saveMany($toSave));
+            {
                 $this->Flash->success(__('The scenarios territorials domain has been saved.'));
-
                 return $this->redirect(['controller' => 'Domains','action' => 'view', $domain_id]);
-            }*/
+            }
             $this->Flash->error(__('The scenarios parameters could not be saved. Please, try again.'));
         }
 
@@ -192,7 +194,7 @@ class ScenariosTerritoriesDomainsController extends AppController
             }
             if(!$this->ScenariosTerritoriesDomains->saveMany($toSave))
             {
-                $this->Flash->error(__('Parameters cannot be saved'));
+                $this->Flash->error(__('The scenarios parameters could not be saved. Please, try again.'));
                 return $this->redirect(['action' => 'add', $scenario_id]);
             }
 
@@ -205,7 +207,6 @@ class ScenariosTerritoriesDomainsController extends AppController
 
 
     }
-
 
     public function getCsvParams($id,$csv)
     {

@@ -157,10 +157,7 @@
             });
         });
 
-
         $("#treeview :checkbox").change(function(){
-
-
             var label = ($(this).next());
 
             var text= $(label).text();

@@ -126,10 +126,14 @@ class HomesController extends AppController
 
         foreach ($study as $study_territory)
         {
+            $tax_rehab = round($study_territory->tax_rehab,3);
+            $tax_construction = round($study_territory->tax_construction,3);
+            $tax_anual_desertion = round($study_territory->tax_anual_desertion,3);
+
             array_push($study_taxes,array_merge(['territory'=> $study_territory->territories_domain->territory->name ],
                 ['id' => $study_territory->territories_domain->territory->id]
-                ,['tax_rehab' => $study_territory->tax_rehab],
-                ['tax_construction' => $study_territory->tax_construction],['tax_anual_desertion' => $study_territory->tax_anual_desertion]));
+                ,['tax_rehab' => $tax_rehab],
+                ['tax_construction' => $tax_construction],['tax_anual_desertion' => $tax_anual_desertion]));
         }
         $response = $study_taxes;
         $this->set(compact('response'));

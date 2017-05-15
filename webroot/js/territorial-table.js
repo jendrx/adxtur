@@ -19,23 +19,24 @@ function get_table_data() {
 
 function load_table_data(data, type_admin) {
 
-    var construct_input = '<input  id="tax_construct_input" class="tax_input" style="height: auto;" type="number"  min="0" value="0" max="10" step="0.5" />'
-    var rehab_input = '<input  id=tax_rehab_input class="tax_input" style="height: auto;" type="number" min="0" value="0" max="10" step="0.5" />'
+    //var construct_input = '<input  id="tax_construct_input" class="tax_input" style="height: auto;" type="number"  min="0" value="0" max="10" step="0.5" />'
+    //var rehab_input = '<input  id=tax_rehab_input class="tax_input" style="height: auto;" type="number" min="0" value="0" max="10" step="0.5" />'
 
 
     //choose table's header
     $('#table_territorials').append('<thead>' +
         '<th>' + type_admin + '</th>' + '<th>' + 'Construção' + '</th>' +
-        '<th>' + 'Reabilitação' + '</th></thead><tbody></tbody>');
+        '<th>' + 'Reabilitação' + '</th><th>' + 'Demolição'+'</th></thead><tbody></tbody>');
 
 
     // populate rows
 
     $.each(data, function (key,value) {
         var $cons_input  = $('<input>', {"class":"tax_cons_input","type":"number","min":0,"max":10, "step":0.5, "value":value['tax_construction']});
-        var $rehab_input = $('<input>', {"class":"tax_rehab_input","type":"number","min":0,"max":10, "step":0.5, "value":value['tax_construction']});
+        var $rehab_input = $('<input>', {"class":"tax_rehab_input","type":"number","min":0,"max":10, "step":0.5, "value":value['tax_rehab']});
+        var $demo_input = $('<input>', {"class":"tax_rehab_input","type":"number","min":0,"max":10, "step":0.5, "value":value['tax_anual_desertion'],'disabled':'true','style':'width:auto'});
         $("#table_territorials > tbody:last-child").append('<tr><td><label class = "label_input" value="' + value["id"] + '">' + value['territory'] + '</td>' +
-            '<td>' + $cons_input.prop('outerHTML') + ' </td><td>' + $rehab_input.prop('outerHTML') + '</td></tr>')
+            '<td>' + $cons_input.prop('outerHTML') + ' </td><td>' + $rehab_input.prop('outerHTML') + '</td><td>' + $demo_input.prop('outerHTML') + '</td></tr>')
     });
 }
 

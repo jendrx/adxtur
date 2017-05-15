@@ -110,11 +110,10 @@ class HomesController extends AppController
 
             }
             array_push($territorials_politics, $territorial_data);
+
         }
 
         $response = $territorials_politics;
-
-        $this->request->session()->delete('Config.language');
         $this->set(compact('response'));
         $this->set('_serialize',['response']);
     }

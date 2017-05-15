@@ -4,20 +4,6 @@
  */
 ?>
 
-<style>
-	.row-eq-height {
-		display: -webkit-box;
-		display: -webkit-flex;
-		display: -ms-flexbox;
-		display: flex;
-	}
-
-	.row-eq-height > [class*='col-'] {
-		display: flex;
-		flex-direction: column;
-	}
-</style>
-
 <div class="row">
 	<div class="col-md-12">
 		<h3><?= h($domain->name) ?></h3>
@@ -47,8 +33,8 @@
 						<!--<th scope="col"><?= __('Id') ?></th>
 							<!--<th scope="col"><?= __('Code') ?></th>-->
 
-						<th scope="col"><?= __('Municipality') ?></th>
-						<th scope="col"><?= __('Parish') ?></th>
+						<!--<th scope="col"><?= __('Municipality') ?></th>
+						<th scope="col"><?= __('Parish') ?></th>-->
 						<th scope="col"><?= __('Dicofre') ?></th>
 						<th scope="col"><?= __('Admin Type') ?></th>
 						<th scope="col"><?= __('Name') ?></th>
@@ -59,8 +45,8 @@
 						<tr>
 							<!-- <td><?= h($territories->id) ?></td>
 									<td><?= h($territories->code) ?></td>-->
-							<td><?= h($territories->municipality) ?></td>
-							<td><?= h($territories->parish) ?></td>
+							<!--<td><?= h($territories->municipality) ?></td>
+							<td><?= h($territories->parish) ?></td>-->
 							<td><?= h($territories->dicofre) ?></td>
 							<td><?= h($territories->admin_type) ?></td>
 							<td><?= h($territories->name) ?></td>

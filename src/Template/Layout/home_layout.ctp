@@ -22,10 +22,10 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 </head>
 <body>
 <?= $this->element('header') ?>
-<div class="container-fluid" style="min-height: 100%">
+<div class="container-fluid" style="heigth:100%">
 	<div class="row-fluid">
+        <?= $this->Flash->render() ?>
 		<div class="col-md-12">
-            <?= $this->Flash->render() ?>
             <?= $this->fetch('content') ?>
 		</div>
 	</div>
