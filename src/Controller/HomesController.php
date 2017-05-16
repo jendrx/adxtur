@@ -12,29 +12,11 @@ class HomesController extends AppController
 {
     public function index()
     {
-        $this->loadModel('ScenariosTerritoriesDomains');
-
-        if($this->request->is('post'))
-        {
-            $data = $this->request->getData();
-
-            $file_url = $this->uploadFile('uploads',$data['file'],null);
-
-            $data = ($this->ScenariosTerritoriesDomains->importCsv($file_url,['id','actual_total_population','closed_population','migrations','total_population','habitants_per_lodge']));
-
-            foreach($data as $row)
-            {
-                echo json_encode($row);
-            }
-
-        }
-
-
         $this->viewBuilder()->setLayout('home_layout');
         $this->loadModel('Domains');
 
         // get domains by user list
-        $domains = $this->Domains->find('all')->select([]);
+        $domains = $this->Domains->find('all');
         $this->set(compact('domains'));
         $this->set('_serialize', ['domains']);
 
@@ -46,56 +28,15 @@ class HomesController extends AppController
         $this->loadModel('Domains');
 
         $current_domain = $this->Domains->get($id, array('contain' => array('Studies','Scenarios','Features','Types')));
-
         $territories = $this->getTerritories($id, count($current_domain->types));
-
         $scenarios = $this->Domains->Scenarios->find('list',['field' => ['id','name'],'conditions' => ['domain_id' => $id]]);
         $studies = $this->Domains->Studies->find('list',['field' => ['id','name'],'conditions' => ['domain_id' => $id]]);
-
         $start_view = $this->getCentroid($id);
+
+
         $this->set(compact('current_domain','scenarios','studies','territories','start_view'));
         $this->set('_serialize', ['current_domain','scenarios','studies','territories','start_view']);
     }
-
-//
-//    public function getDomainData()
-//    {
-//        $this->loadModel('Domains');
-//
-//        $id = $this->request->getQueryParams()['domain'];
-//
-//        $q_territorials_data =  $this->Domains->find('all',['conditions' =>['id =' => $id]])->select([])
-//            ->contain(['Territories' => ['fields' => ['TerritoriesDomains.domain_id','id','admin_type','municipality','parish','name']]]);
-//
-//        $domain_data = $this->Domains->find('all',['conditions' => ['id = ' => $id]])->select([])
-//            ->contain(['Studies' => ['fields' => ['Studies.domain_id','id','name']]])
-//            ->contain(['Features' => ['fields' => ['FeaturesDomains.domain_id','id','name']]])
-//            ->contain(['Types' => ['fields' => ['TypesDomains.domain_id','id','name']]])
-//            ->contain(['Scenarios' => ['fields' => ['Scenarios.domain_id','id','name']]]);
-//
-//        //extract geom of territorials
-//        $spots_geojson = array();
-//
-//        $spots_params = array();
-//
-//
-//        foreach ($q_territorials_data as $territorials_info )
-//        {
-//            foreach ($territorials_info->territories  as  $spot)
-//            {
-//                array_push($spots_params,$spot);
-//            }
-//        }
-//
-//        $territorials_geoJSON = array("type" => "FeatureCollection", "features" => $spots_geojson);
-//
-//        $response = compact('spots_params','territorials_geoJSON','domain_data');
-//
-//        $this->set(compact('response'));
-//        $this->set('_serialize', ['response']);
-//        $this->render('ajax');
-//
-//    }
 
     public function getPoliticTaxes()
     {
