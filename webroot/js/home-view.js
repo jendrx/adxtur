@@ -152,5 +152,10 @@ function init(data) {
     var parent = null;
     var study_id = $("#sel_studies").val();
     var scenario_id = $('#sel_scenarios').val();
-    get_politic_taxes(study_id,levels,parent);
+    //get_politic_taxes(study_id,levels,parent);
+
+    $.when(get_politic_taxes(study_id,levels,parent)).done(function(){
+        newcalc(data.id,study_id,scenario_id,get_table_data(),levels,null);
+    });
+
 }

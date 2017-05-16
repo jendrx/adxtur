@@ -23,13 +23,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body style="height:100%">
 <div id ="wrap" style="min-height:100%;">
     <?= $this->element('header') ?>
-	<div class="container-fluid" style="overflow: auto;padding-bottom: 150px;">
-		<div class="row-fluid">
-            <?= $this->Flash->render() ?>
-			<div class="col-md-12">
-                <?= $this->fetch('content') ?>
-			</div>
-		</div>
+	<div class="container-fluid" style="overflow: auto;padding-bottom: 10%;">
+        <?= $this->Flash->render() ?>
+        <?= $this->fetch('content') ?>
 
 	</div>
 </div>

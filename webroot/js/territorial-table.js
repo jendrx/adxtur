@@ -19,10 +19,6 @@ function get_table_data() {
 
 function load_table_data(data, type_admin) {
 
-    //var construct_input = '<input  id="tax_construct_input" class="tax_input" style="height: auto;" type="number"  min="0" value="0" max="10" step="0.5" />'
-    //var rehab_input = '<input  id=tax_rehab_input class="tax_input" style="height: auto;" type="number" min="0" value="0" max="10" step="0.5" />'
-
-
     //choose table's header
     $('#table_territorials').append('<thead>' +
         '<th>' + type_admin + '</th>' + '<th>' + 'Construção' + '</th>' +
@@ -30,7 +26,6 @@ function load_table_data(data, type_admin) {
 
 
     // populate rows
-
     $.each(data, function (key,value) {
         var $cons_input  = $('<input>', {"class":"tax_cons_input","type":"number","min":0,"max":10, "step":0.5, "value":value['tax_construction']});
         var $rehab_input = $('<input>', {"class":"tax_rehab_input","type":"number","min":0,"max":10, "step":0.5, "value":value['tax_rehab']});

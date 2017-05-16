@@ -20,20 +20,28 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <head>
     <?= $this->element('head') ?>
 </head>
-<body>
+<body style="height:100%">
 <div id="wrap" style="min-height:100%">
     <?= $this->element('admin_header') ?>
-	<div class="container-fluid" style="overflow: auto;padding-bottom: 155px;">
+	<div class="container-fluid" style="padding-bottom: 10%;overflow: auto">
+
 		<div class="row-fluid">
+
+
             <?= $this->Flash->render() ?>
-			<div class="col-md-4" >
+
+			<div class="col-md-4">
                 <?= $this->element('sidebar') ?>
 			</div>
+
+
 			<div class="col-md-8">
                 <?= $this->fetch('content') ?>
 			</div>
 
 		</div>
+
+
 	</div>
 </div>
 <?= $this->element('footer') ?>
