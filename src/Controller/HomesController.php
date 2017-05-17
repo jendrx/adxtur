@@ -34,8 +34,8 @@ class HomesController extends AppController
         $start_view = $this->getCentroid($id);
 
 
-        $this->set(compact('current_domain','scenarios','studies','territories','start_view'));
-        $this->set('_serialize', ['current_domain','scenarios','studies','territories','start_view']);
+        $this->set(compact('current_domain','studies','scenarios','territories','start_view'));
+        $this->set('_serialize', ['current_domain','studies','scenarios','territories','start_view']);
     }
 
     public function getPoliticTaxes()
@@ -111,25 +111,29 @@ class HomesController extends AppController
     }
 
 
-    public function updateStudyRules($studyId = null)
+    public function updateStudyRules()
     {
         $this->loadModel('Rules');
+        $this->loadModel('StudiesRulesTerritoriesDomains');
         $this->loadModel('Studies');
+
         $params = $this->request->getQueryParams();
         $studyId = $params['study'];
 
         $studyRules = array();
         $rules = array();
-        if($this->request->is(['ajax','get']))
+        if($this->request->is(['ajax']))
         {
-            $study = $this->Studies->get($studyId, [
-                'contain' => ['Domains', 'TerritoriesDomains' =>['Territories' =>['fields' => ['name']]],
+            $this->viewBuilder()->setLayout('ajax');
 
-                ]]);
+            $study = $this->Studies->get($studyId, [
+                'contain' => ['Domains', 'TerritoriesDomains' =>['Territories' =>['fields' => ['name']]]]]);
 
             foreach ($study->territories_domains as $territory_domain)
             {
                 $rules = $this->StudiesRulesTerritoriesDomains->find('all',['conditions' => ['study_id = ' => $studyId,'territory_domain_id = ' => $territory_domain->id]]);
+
+
                 $studyRules[$territory_domain->territory->name] = $rules;
 
             }
@@ -137,8 +141,10 @@ class HomesController extends AppController
             $rules = $this->Rules->find('all',['order' => ['id']]);
         }
 
-        $this->set(compact('studyRules','rules'));
-        $this->set('_serialize',['studyRules','rules']);
+        $content = compact('rules','studyRules');
+
+        $this->set(compact('content'));
+        $this->set('_serialize',['content']);
     }
 
 

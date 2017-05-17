@@ -64,6 +64,9 @@ class ScenariosTable extends Table
         $validator
             ->allowEmpty('description');
 
+        $validator
+            ->allowEmpty('projection_years');
+
         return $validator;
     }
 

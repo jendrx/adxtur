@@ -1,68 +1,8 @@
 <?php echo $this->Html->script(['map','territorial-table','view-data','home-view']); ?>
 
-
-<script>
-    function update_taxes(study_id,table_data) {
-        $.ajax(
-            {
-                type: 'post',
-                url: '/studies-rules-territories-domains/updateTaxes.json',
-                data: {
-                    study: study_id,
-                    table_data: table_data
-                },
-                success: function (data) {
-                    alert(data.message);
-                }
-            }
-        );
-
-    }
-
-
-    function getStudyRules(study_id) {
-        $.ajax(
-            {
-                type: 'get',
-                url: '/studies-rules-territories-domains/getStudyRules.json',
-                data: {
-                    study: study_id
-                },
-                success: function (data) {
-
-                    alert(data.message);
-                }
-            }
-        );
-
-    }
-
-</script>
-
-
-
 <div class="row-fluid">
-	<button id="mod_trigger" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" >
-		Launch demo modal
-	</button>
 
-	<!-- Modal -->
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Modal title</h4>
-				</div>
-				<div class="modal-body">
-					...
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
-			</div>
-		</div>
+	<div id="test_div">
 	</div>
 	<div class="col-md-2">
 		<h4> Ano de referência 2040</h4>
@@ -151,7 +91,7 @@
                 update_taxes($('#sel_studies').val(),get_table_data());
             });
 
-        $('#mod_trigger').click(function()
+        $('#export_btn').click(function()
         {
            getStudyRules($('#sel_studies').val());
         });

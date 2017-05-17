@@ -467,7 +467,7 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
 
     }
 
-    public function getStudyRules()
+/*    public function getStudyRules()
     {
         $this->loadModel('Rules');
         $this->loadModel('Studies');
@@ -495,5 +495,5 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
 
         $this->set(compact('studyRules','rules'));
         $this->set('_serialize',['studyRules','rules']);
-    }
+    }*/
 }

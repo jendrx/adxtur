@@ -75,6 +75,60 @@ function fill_resume(globals) {
 //     session_store_values(id);
 // }
 
+
+//    function study_rules_markup(content)
+//    {
+//	    var html =
+//		        '<table> ' +
+//		        '   <thead>' +
+//		        '     <th> Territory </th>'
+//
+//	    for(i = 0; i < content.rules.length; i++) {
+//	        html += '<th>' + content.rules[i].description + '</th>';
+//	    }
+//
+//	    //close header begin body tag
+//	    html += '</thead><tbody>';
+//
+//	    for( key in content.studyRules )
+//	    {
+//	        if(content.studyRules.hasOwnProperty(key)) {
+//
+//	            var current = content.studyRules[key];
+//
+//	            html += '<tr><td>'+ key + '</td>';
+//
+//	            for(i = 0; i < current.length; i++)
+//                    html += '<td><input type="number", step=0.1, value='+current[i].value +' > </input></td>';
+//
+//	            html += '</tr>';
+//	        }
+//	    }
+//
+//	    html += '</tbody></table>';
+//	    return html;
+//
+//    }
+//
+//    function getStudyRules(study_id) {
+//        $.ajax(
+//            {
+//                type: 'get',
+//                url: '/homes/updateStudyRules',
+//	            dataType: 'json',
+//                data: {
+//                    study: study_id
+//                },
+//                success: function (data) {
+//	                $("#modal_body").prepend(study_rules_markup(data.content));
+//	                $("#myModal").modal('show');
+//
+//                }
+//            }
+//        );
+//
+//    }
+
 function get_politic_taxes(study_id,levels,parent) {
     $.ajax(
         {
@@ -157,5 +211,22 @@ function init(data) {
     $.when(get_politic_taxes(study_id,levels,parent)).done(function(){
         newcalc(data.id,study_id,scenario_id,get_table_data(),levels,null);
     });
+
+}
+
+function update_taxes(study_id,table_data) {
+    $.ajax(
+        {
+            type: 'post',
+            url: '/studies-rules-territories-domains/updateTaxes.json',
+            data: {
+                study: study_id,
+                table_data: table_data
+            },
+            success: function (data) {
+                alert(data.message);
+            }
+        }
+    );
 
 }
