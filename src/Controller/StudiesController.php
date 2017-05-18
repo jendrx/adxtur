@@ -64,15 +64,18 @@ class StudiesController extends AppController
      */
     public function add($domain_id = null)
     {
-        if (!(isset($domain_id)))
-        {
-            $this->Flash->error(__('There is no associated domain.'));
-            return $this->redirect(['controller' => 'Domains','action' => 'index']);
-        }
-
         $this->loadModel('TerritoriesDomains');
         $this->loadModel('Rules');
         $this->loadModel('Scenarios');
+
+        $proj_years = $this->Scenarios->find('list',['keyField' => 'projection_years','valueField' => 'projection_years','conditions' => ['domain_id = ' => $domain_id]]);
+
+
+        if ($domain_id == null || empty($proj_years->toArray()))
+        {
+            $this->Flash->error(__('There is no associated domain or scenario.'));
+            return $this->redirect(['controller' => 'Domains','action' => 'index']);
+        }
 
         $study = $this->Studies->newEntity();
 
@@ -89,14 +92,10 @@ class StudiesController extends AppController
         }
 
 
-        $proj_years = $this->Studies->find('list',['keyField' => 'projection_years','valueField' => 'projection_years','conditions' => ['domain_id = ' => $domain_id]]);
 
-        $domains = $this->Studies->Domains->find('list', ['limit' => 200]);
 
-        $territoriesDomains = $this->Studies->TerritoriesDomains->find('list', ['limit' => 200]);
-
-        $this->set(compact('study', 'domains', 'territoriesDomains','proj_years'));
-        $this->set('_serialize', ['study']);
+        $this->set(compact('study','proj_years'));
+        $this->set('_serialize', ['study','proj_years']);
     }
 
     /**
