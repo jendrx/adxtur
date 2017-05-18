@@ -138,6 +138,7 @@ class ScenariosTerritoriesDomainsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    // add scenariosTerritoriesDomainsController by upload csv
     public function addUploaded($scenario_id = null)
     {
         $this->loadModel('Scenarios');
@@ -198,6 +199,8 @@ class ScenariosTerritoriesDomainsController extends AppController
 
     }
 
+
+    // get row fields by dicofre
     public function getCsvParams($id,$csv)
     {
         $params = null;
