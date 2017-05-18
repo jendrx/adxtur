@@ -12,7 +12,6 @@ namespace App\Controller;
 class MapsController extends AppController
 {
 
-
     public function getTerritorialLayer()
     {
         $this->loadModel('Domains');
@@ -47,6 +46,7 @@ class MapsController extends AppController
 
             }
         }
+
         $q_territorials = $this->Domains->find('all',['conditions' => ['id = ' => $domain_id]])->select([])
             ->contain(['Territories' => ['fields' => ['TerritoriesDomains.domain_id','geom_geoJson'],'conditions' => $conditions]]);
 
@@ -64,7 +64,6 @@ class MapsController extends AppController
         }
 
         $response = $this->toFeatureCollection($spots_geoJSON);
-
         $this->set(compact('response'));
         $this->set('_serialize',['response']);
 

@@ -91,22 +91,6 @@ class DomainsController extends AppController
         $this->set(compact('domain', 'features', 'territorials', 'types','municipalities'));
         $this->set('_serialize', ['domain','municipalities']);
 
-
-        /*$domain = $this->Domains->newEntity();
-        if ($this->request->is('post')) {
-            $domain = $this->Domains->patchEntity($domain, $this->request->getData());
-            if ($this->Domains->save($domain)) {
-                $this->Flash->success(__('The domain has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The domain could not be saved. Please, try again.'));
-        }
-        $features = $this->Domains->Features->find('list', ['limit' => 200]);
-        $territories = $this->Domains->Territories->find('list', ['limit' => 200]);
-        $types = $this->Domains->Types->find('list', ['limit' => 200]);
-        $this->set(compact('domain', 'features', 'territories', 'types'));
-        $this->set('_serialize', ['domain']);*/
     }
 
     /**
