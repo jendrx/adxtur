@@ -177,7 +177,6 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
     {
         $tax = 0;
 
-
         $lodges_dist = $this->getLodgesDistribution();
 
         foreach ($rules as $key=>$value)
