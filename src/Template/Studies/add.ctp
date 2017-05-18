@@ -34,10 +34,10 @@
 		</div>
 		<div class="row">
 			<div class="col-md-3">
-				<?=$this->Form->control('actual_year',['type' => 'number', 'value' => '2011'])?>
+				<?=$this->Form->control('actual_year',['type' => 'number', 'value' => '2011', 'readonly' => true])?>
 			</div>
 			<div class="col-md-3">
-				<?=$this->Form->control('projection_years',['type' => 'number', 'value' => '29'])?>
+				<?=$this->Form->control('projection_years',['type' => 'select', 'value' => '29','options' => $proj_years, 'style' => 'height:auto'])?>
 			</div>
 		</div>
 		<div class="row">

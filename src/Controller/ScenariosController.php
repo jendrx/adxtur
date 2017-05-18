@@ -51,35 +51,16 @@ class ScenariosController extends AppController
      */
     public function add($domain_id = null)
     {
-        /*$scenario = $this->Scenarios->newEntity();
-        if ($this->request->is('post')) {
-            $scenario = $this->Scenarios->patchEntity($scenario, $this->request->getData());
-            if ($this->Scenarios->save($scenario)) {
-                $this->Flash->success(__('The scenario has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The scenario could not be saved. Please, try again.'));
-        }
-        $domains = $this->Scenarios->Domains->find('list', ['limit' => 200]);
-        $territoriesDomains = $this->Scenarios->TerritoriesDomains->find('list', ['limit' => 200]);
-        $this->set(compact('scenario', 'domains', 'territoriesDomains'));
-        $this->set('_serialize', ['scenario']);*/
-
-
         $this->loadModel('TerritoriesDomains');
         $this->loadModel('Rules');
         $scenario = $this->Scenarios->newEntity();
-
-        //$territoriesDomains = $this->TerritoriesDomains->find("all",['conditions' => ['domain_id = ' => $domain_id ],'fields' => ['id','domain_id','territory_id']]);
 
 
         if ($this->request->is('post')) {
 
             $scenario->domain_id = $domain_id;
-            //$scenario->territories_domains = $territoriesDomains->toArray();
-
             $data = $this->request->getData();
+
             $scenario = $this->Scenarios->patchEntity($scenario, $data);
 
             if ($this->Scenarios->save($scenario)) {

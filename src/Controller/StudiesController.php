@@ -69,10 +69,13 @@ class StudiesController extends AppController
             $this->Flash->error(__('There is no associated domain.'));
             return $this->redirect(['controller' => 'Domains','action' => 'index']);
         }
+
         $this->loadModel('TerritoriesDomains');
         $this->loadModel('Rules');
+        $this->loadModel('Scenarios');
 
         $study = $this->Studies->newEntity();
+
         if ($this->request->is('post')) {
 
             $study->domain_id = $domain_id;
@@ -84,9 +87,15 @@ class StudiesController extends AppController
             }
             $this->Flash->error(__('The study could not be saved. Please, try again.'));
         }
+
+
+        $proj_years = $this->Studies->find('list',['keyField' => 'projection_years','valueField' => 'projection_years','conditions' => ['domain_id = ' => $domain_id]]);
+
         $domains = $this->Studies->Domains->find('list', ['limit' => 200]);
+
         $territoriesDomains = $this->Studies->TerritoriesDomains->find('list', ['limit' => 200]);
-        $this->set(compact('study', 'domains', 'territoriesDomains'));
+
+        $this->set(compact('study', 'domains', 'territoriesDomains','proj_years'));
         $this->set('_serialize', ['study']);
     }
 
