@@ -466,34 +466,4 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
 
 
     }
-
-/*    public function getStudyRules()
-    {
-        $this->loadModel('Rules');
-        $this->loadModel('Studies');
-        $params = $this->request->getQueryParams();
-        $studyId = $params['study'];
-
-        $studyRules = array();
-        $rules = array();
-        if($this->request->is(['ajax','get']))
-        {
-            $study = $this->Studies->get($studyId, [
-                'contain' => ['Domains', 'TerritoriesDomains' =>['Territories' =>['fields' => ['name']]],
-
-                ]]);
-
-            foreach ($study->territories_domains as $territory_domain)
-            {
-                $rules = $this->StudiesRulesTerritoriesDomains->find('all',['conditions' => ['study_id = ' => $studyId,'territory_domain_id = ' => $territory_domain->id]]);
-                $studyRules[$territory_domain->territory->name] = $rules;
-
-            }
-
-            $rules = $this->Rules->find('all',['order' => ['id']]);
-        }
-
-        $this->set(compact('studyRules','rules'));
-        $this->set('_serialize',['studyRules','rules']);
-    }*/
 }
