@@ -14,6 +14,14 @@
 				</div>
 			</div>
 			<div class="row">
+				<div class="col-md-3">
+                    <?=$this->Form->control('actual_year',['type' => 'number', 'value' => '2011'])?>
+				</div>
+				<div class="col-md-3">
+                    <?=$this->Form->control('projection_years',['type' => 'number', 'value' => '29'])?>
+				</div>
+			</div>
+			<div class="row">
 				<div class="col-md-9">
                     <?php echo $this->Form->control('description');?>
 				</div>

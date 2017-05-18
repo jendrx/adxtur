@@ -114,8 +114,8 @@ class HomesController extends AppController
     public function updateStudyRules()
     {
         $this->loadModel('Rules');
-        $this->loadModel('StudiesRulesTerritoriesDomains');
         $this->loadModel('Studies');
+        $this->loadModel('StudiesRulesTerritoriesDomains');
 
         $params = $this->request->getQueryParams();
         $studyId = $params['study'];
@@ -145,6 +145,30 @@ class HomesController extends AppController
 
         $this->set(compact('content'));
         $this->set('_serialize',['content']);
+    }
+
+
+    public function getScenarios()
+    {
+        $this->loadModel('Scenarios');
+        $this->loadModel('Studies');
+
+        $content = array();
+        if($this->request->is(['ajax']))
+        {
+            $this->viewBuilder()->setLayout('ajax');
+            $params = $this->request->getQueryParams();
+            $study_id = $params['study'];
+            $study_info = $this->Studies->get($study_id);
+
+            $content = $this->Scenarios->find('list',
+                ['conditions' => ['domain_id = ' => $study_info->domain_id, 'projection_years = ' => $study_info->projection_years, 'actual_year = ' => $study_info->actual_year]]);
+
+        }
+
+        $this->set(compact('content'));
+        $this->set('_serialize',['content']);
+
     }
 
 

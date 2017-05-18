@@ -206,11 +206,7 @@ function init(data) {
     var parent = null;
     var study_id = $("#sel_studies").val();
     var scenario_id = $('#sel_scenarios').val();
-    //get_politic_taxes(study_id,levels,parent);
 
-    $.when(get_politic_taxes(study_id,levels,parent)).done(function(){
-        newcalc(data.id,study_id,scenario_id,get_table_data(),levels,null);
-    });
 
 }
 
@@ -229,4 +225,29 @@ function update_taxes(study_id,table_data) {
         }
     );
 
+}
+
+function get_scenarios(study_id)
+{
+    $.ajax(
+        {
+            type: 'get',
+            url: '/homes/getScenarios',
+            dataType: 'json',
+            data:{
+                study: study_id
+            },
+            success:function(data) {
+                $('#sel_scenarios').find('option').remove();
+
+                $.each(data.content,function(key,val)
+                {
+                   $('#sel_scenarios').append($('<option>',{'text':val, 'val':key}));
+                });
+
+            }
+
+
+        }
+    );
 }

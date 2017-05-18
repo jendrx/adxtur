@@ -28,7 +28,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-3">
-            <?= $this->Form->control('Scenarios', array('type' => 'select', 'options' => $scenarios, 'style' => 'height:auto', 'id' => 'sel_scenarios')) ?>
+            <?= $this->Form->control('Scenarios', array('type' => 'select', 'options' => [], 'style' => 'height:auto', 'id' => 'sel_scenarios')) ?>
 		</div>
 		<div class="col-md-3">
             <?= $this->Form->control('Studies', array('type' => 'select', 'options' => $studies, 'style' => 'height:auto', 'id' => 'sel_studies')) ?>
@@ -75,6 +75,8 @@
             $("#sel_studies").change(function() {
                 var scenario_id = $("#sel_scenarios").val();
                 var study_id = $(this).val();
+
+                get_scenarios(study_id);
                 remove_table_rows('table_territorials');
                 var taxes = get_politic_taxes(study_id,domain_data.types.length,null);
 
