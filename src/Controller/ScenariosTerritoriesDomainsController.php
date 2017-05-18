@@ -60,13 +60,10 @@ class ScenariosTerritoriesDomainsController extends AppController
         $territories = $this->TerritoriesDomains->find('all',['conditions' => ['domain_id = ' => $domain_id ]])
             ->contain(['Territories' => ['fields' => ['name','dicofre']]]);
 
-
-        $all_saved = true;
         if ($this->request->is('post')) {
+
             $toSave = array();
             $data = $this->request->getData();
-
-            echo json_encode($data);
 
             foreach($data as $key=> $value)
             {
@@ -78,12 +75,6 @@ class ScenariosTerritoriesDomainsController extends AppController
                 $scenariosTerritoriesDomain->total_population = $value['total_population'];
                 $scenariosTerritoriesDomain->habitants_per_lodge = $value['habitants_per_lodge'];
                 $scenariosTerritoriesDomain->actual_total_population = $value['actual_total_population'];
-
-                /*$all_saved = $this->ScenariosTerritoriesDomains->save($scenariosTerritoriesDomain);
-                if (!$all_saved)
-                {
-                    break;
-                }*/
 
                 array_push($toSave,$scenariosTerritoriesDomain);
             }
@@ -157,6 +148,7 @@ class ScenariosTerritoriesDomainsController extends AppController
 
         $territories = $this->TerritoriesDomains->find('all',['conditions' => ['domain_id = ' => $domain_id ]])
             ->contain(['Territories' => ['fields' => ['name','dicofre']]]);
+
         if($this->request->is('post'))
         {
             $toSave = array();
@@ -203,8 +195,6 @@ class ScenariosTerritoriesDomainsController extends AppController
             $this->Flash->success(__('Scenario parameters saved!'));
             return $this->redirect(['controller' => 'Domains','action' => 'view', $domain_id]);
         }
-
-
 
     }
 
