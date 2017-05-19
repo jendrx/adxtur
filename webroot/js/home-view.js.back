@@ -1,18 +1,12 @@
 /**
- * Created by rom on 5/19/17.
+ * Created by rom on 5/9/17.
  */
+
 var response;
 
-
-function showResults(domain_id,study_id,scenario_id,levels,parent_id,data)
-{
-    locals=data.response.locals;
-    getTerritorialLayer(domain_id,levels,parent_id);
-    fill_resume(data.response.global_predict);
+function newcalc(domain_id,politic_id,scenario_id,taxes,levels,parent_id) {
+    getTerritorialResults(domain_id,politic_id,scenario_id,taxes,levels,parent_id);
 }
-
-
-
 
 function fill_resume(globals) {
     $('#popResidente').val(Math.round(globals.predicted_total_population));
@@ -135,27 +129,7 @@ function fill_resume(globals) {
 //
 //    }
 
-// function getStudyTaxes(study_id,levels,parent) {
-//     $.ajax(
-//         {
-//             type: 'get',
-//             url: '/Homes/getPoliticTaxes.json',
-//             data: {
-//                 study:study_id,
-//                 level:levels,
-//                 parent: parent
-//             },
-//             success: function(data)
-//             {
-//                 load_table_data(data.response);
-//
-//             }
-//         }
-//     );
-// }
-
-
-function getStudyTaxes(domain_id, study_id, scenario_id, levels, parent, callback) {
+function getStudyTaxes(study_id,levels,parent) {
     $.ajax(
         {
             type: 'get',
@@ -167,14 +141,12 @@ function getStudyTaxes(domain_id, study_id, scenario_id, levels, parent, callbac
             },
             success: function(data)
             {
-                callback(data.response);
+                load_table_data(data.response);
 
             }
         }
     );
-
 }
-
 
 function getTerritorialLayer(domain_id,levels,parent) {
     $.ajax(
@@ -195,39 +167,14 @@ function getTerritorialLayer(domain_id,levels,parent) {
     );
 }
 
-// function getTerritorialResults(domain_id,politic_id,scenario_id,taxes,levels,parent_id) {
-//     $.ajax(
-//         {
-//             type: 'get',
-//             url: '/Calcs/getResults.json',
-//             data: {
-//                 domain: domain_id,
-//                 politic:politic_id,
-//                 scenario:scenario_id,
-//                 taxes: taxes,
-//                 parent: parent_id,
-//                 levels: levels
-//             },
-//             success: function(data)
-//             {
-//
-//                 locals=data.response.locals;
-//                 getTerritorialLayer(domain_id,levels,1,parent_id);
-//                 fill_resume(data.response.global_predict);
-//
-//             }
-//         }
-//     );
-// }
-
-function getTerritorialResults(domain_id, study_id, scenario_id, taxes, levels, parent_id, callback) {
+function getTerritorialResults(domain_id,politic_id,scenario_id,taxes,levels,parent_id) {
     $.ajax(
         {
             type: 'get',
             url: '/Calcs/getResults.json',
             data: {
                 domain: domain_id,
-                politic: study_id,
+                politic:politic_id,
                 scenario:scenario_id,
                 taxes: taxes,
                 parent: parent_id,
@@ -235,7 +182,10 @@ function getTerritorialResults(domain_id, study_id, scenario_id, taxes, levels, 
             },
             success: function(data)
             {
-                callback(domain_id,study_id,scenario_id,levels,parent_id,data);
+
+                locals=data.response.locals;
+                getTerritorialLayer(domain_id,levels,1,parent_id);
+                fill_resume(data.response.global_predict);
 
             }
         }
@@ -245,19 +195,22 @@ function getTerritorialResults(domain_id, study_id, scenario_id, taxes, levels, 
 
 function init(data) {
 
-    console.log(data);
+    console.log(data)
     if(data.studies.length === 0 || data.scenarios.length === 0)
-    {
-        alert('Insuficient data (Studies data or Scenarios Data)');
+     {
+     alert('Insuficient data (Studies data or Scenarios Data)');
 
-        window.location.replace("/homes/index");
-    }
+         window.location.replace("/homes/index");
+     }
     var levels = data.types.length;
     var parent = null;
     var study_id = $("#sel_studies").val();
+    var scenario_id = $('#sel_scenarios').val();
+
+
 }
 
-function updateTaxes(study_id, table_data) {
+function updateTaxes(study_id,table_data) {
     $.ajax(
         {
             type: 'post',
@@ -274,7 +227,8 @@ function updateTaxes(study_id, table_data) {
 
 }
 
-function getScenarios(study_id) {
+function getScenarios(study_id)
+{
     $.ajax(
         {
             type: 'get',
@@ -288,7 +242,7 @@ function getScenarios(study_id) {
 
                 $.each(data.content,function(key,val)
                 {
-                    $('#sel_scenarios').append($('<option>',{'text':val, 'val':key}));
+                   $('#sel_scenarios').append($('<option>',{'text':val, 'val':key}));
                 });
 
             }

@@ -35,7 +35,7 @@ function load_table_data(data, type_admin) {
     });
 }
 
-function remove_table_rows(table_id) {
+function removeTableRows(table_id) {
     $('#'+table_id).find('tr').each( function()
     {
         $(this).remove();

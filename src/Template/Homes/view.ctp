@@ -54,52 +54,48 @@
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
             var domain_data = <?php echo json_encode($current_domain);?>;
             var territories = <?php echo json_encode($territories);?>;
-            var start_view = <?php echo ($start_view);?>;
+            var start_view = <?php echo($start_view);?>;
 
             init(domain_data);
-            createMap([start_view.lat,start_view.lon]);
+            createMap([start_view.lat, start_view.lon]);
 
-            $("#calc_politic_tax").click(function(){
-
-                var  scenario_id = $("#sel_scenarios").val();
-                var  study_id =$("#sel_studies").val();
+            $("#calc_politic_tax").click(function () {
+                var scenario_id = $("#sel_scenarios").val();
+                var study_id = $("#sel_studies").val();
                 var taxes = get_table_data();
-                //domain_id,politic_id,scenario_id,taxes,levels,parent_id
-	            newcalc(domain_data.id,study_id,scenario_id,taxes,domain_data.types.length,null);
+                getTerritorialResults(domain_data.id, study_id, scenario_id, taxes, domain_data.types.length, null,
+	                showResults);
 
             });
 
-            $("#sel_studies").change(function() {
+            $("#sel_studies").change(function () {
                 var scenario_id = $("#sel_scenarios").val();
                 var study_id = $(this).val();
+                getScenarios(study_id);
+                removeTableRows('table_territorials');
+                getStudyTaxes(null, study_id, scenario_id, 1, null, load_table_data);
 
-                get_scenarios(study_id);
-                remove_table_rows('table_territorials');
-                var taxes = get_politic_taxes(study_id,domain_data.types.length,null);
 
-
-                
             });
 
             $("#sel_scenarios").change(function () {
-                var  study_id =$("#sel_studies").val();
+                var study_id = $("#sel_studies").val();
                 var scenario_id = $(this).val();
             });
-            $('#save_taxes').click(function()
-            {
-                update_taxes($('#sel_studies').val(),get_table_data());
+
+            $('#save_taxes').click(function () {
+                updateTaxes($('#sel_studies').val(), get_table_data());
             });
 
-        $('#export_btn').click(function()
-        {
-            var scenario_id = $("#sel_scenarios").val();
-            var study_id = $(this).val();
+            $('#export_btn').click(function () {
+                var scenario_id = $("#sel_scenarios").val();
+                var study_id = $(this).val();
 
-            exportCsv();
-        });
+                exportCsv();
+            });
 
         }
     );
