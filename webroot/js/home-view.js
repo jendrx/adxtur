@@ -297,3 +297,23 @@ function getScenarios(study_id) {
         }
     );
 }
+
+function exportCsv(study_id,scenario_id,data)
+{
+    $.ajax(
+    {
+        type: 'get',
+        url: 'homes/exportCsv',
+        dataType: 'json',
+        data: {
+
+        },
+        success: function(data)
+        {
+            console.log(data);
+        }
+
+
+    }
+);
+}

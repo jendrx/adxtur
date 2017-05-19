@@ -171,15 +171,18 @@ class HomesController extends AppController
 
     public function exportCsv()
     {
-        $this->loadModel('Domains');
-        $this->response->withDownload("export.csv");
+        $this->loadModel('Scenarios');
 
-        $data = $this->Domains->find('all');
+        //$this->response->withDownload("export.csv");
 
+        echo json_encode('ahahah');
+        $data = $this->Scenarios->find('all');
+
+        $this->viewBuilder()->setLayout('ajax') ;
 
         $this->set(compact('data'));
         $this->set('_serialize',['data']);
-        $this->viewBuilder()->setLayout('ajax') ;
+
 
         return;
     }

@@ -76,7 +76,7 @@
                 var study_id = $(this).val();
                 getScenarios(study_id);
                 removeTableRows('table_territorials');
-                getStudyTaxes(null, study_id, scenario_id, 1, null, load_table_data);
+                getStudyTaxes(null, study_id, scenario_id, domain_data.types.length, null, load_table_data);
 
 
             });
@@ -92,9 +92,16 @@
 
             $('#export_btn').click(function () {
                 var scenario_id = $("#sel_scenarios").val();
-                var study_id = $(this).val();
+                var study_id = $('#sel_studies').val();
 
-                exportCsv();
+                getStudyTaxes(null, study_id, scenario_id, domain_data.types.length, null, function(data)
+                {
+                    getTerritorialResults(domain_data.id,study_id,scenario_id,data,1,null,function(data)
+                    {
+                        exportCsv(study_id,scenario_id,data);
+                    });
+                });
+
             });
 
         }
