@@ -95,7 +95,10 @@
 
         $('#export_btn').click(function()
         {
-           getStudyRules($('#sel_studies').val());
+            var scenario_id = $("#sel_scenarios").val();
+            var study_id = $(this).val();
+
+            exportCsv();
         });
 
         }

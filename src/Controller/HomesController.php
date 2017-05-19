@@ -110,7 +110,6 @@ class HomesController extends AppController
 
     }
 
-
     public function updateStudyRules()
     {
         $this->loadModel('Rules');
@@ -147,7 +146,6 @@ class HomesController extends AppController
         $this->set('_serialize',['content']);
     }
 
-
     public function getScenarios()
     {
         $this->loadModel('Scenarios');
@@ -171,5 +169,19 @@ class HomesController extends AppController
 
     }
 
+    public function exportCsv()
+    {
+        $this->loadModel('Domains');
+        $this->response->withDownload("export.csv");
+
+        $data = $this->Domains->find('all');
+
+
+        $this->set(compact('data'));
+        $this->set('_serialize',['data']);
+        $this->viewBuilder()->setLayout('ajax') ;
+
+        return;
+    }
 
 }
