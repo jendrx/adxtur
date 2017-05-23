@@ -7,6 +7,10 @@
  */
 namespace App\Controller;
 use Cake\Datasource\ConnectionManager;
+use Cake\Filesystem\File;
+use Cake\View\ViewBuilder;
+use Cake\Routing\Router;
+
 
 class HomesController extends AppController
 {
@@ -173,18 +177,61 @@ class HomesController extends AppController
     {
         $this->loadModel('Scenarios');
 
-        //$this->response->withDownload("export.csv");
+        $path = null;
 
-        echo json_encode('ahahah');
-        $data = $this->Scenarios->find('all');
+        if ($this->request->is('post'))
+        {
+            $params = $this->request->getData();
+            $studyId = $params['study'];
+            $scenarioId = $params['scenario'];
+            $studiesTerritoriesDomains = $params['studiesTerritoriesDomains'];
+            $locals = $studiesTerritoriesDomains['locals'];
+            $globals = $studiesTerritoriesDomains['global_predict'];
 
-        $this->viewBuilder()->setLayout('ajax') ;
+            $scenarioName = $this->Scenarios->find('all',['conditions' => ['id' => $scenarioId]])->select('name')->first();
 
-        $this->set(compact('data'));
-        $this->set('_serialize',['data']);
+            // Params
+            $_serialize = 'locals';
+            $_delimiter = ',';
+            $_enclosure = '"';
+            $_newline = '\r\n';
+            $_extract = array('name','tax_construction','tax_rehab','tax_anual_desertion','predict_tax_period_variance_lodges',
+                'predicted_empty_avail_lodges','predicted_empty_rehab_lodges', 'predicted_first_lodges','predicted_second_lodges','predicted_population_variance',
+                'predicted_required_lodges', 'predicted_tax_anual_mean_lodges','predicted_total_empty_lodges');
+
+            $_header = array('Território','Taxa Construção','Taxa Reabilitação','Taxa de demolição','Taxa de variação de Alojamentos', 'Alojamentos Vagos Disponiveis',
+                            'Alojamentos Vagos Reabilitação','Alojamentos 1º residência','Alojamentos 2º residência','Variação da População','Alojamentos Necessários',
+                            'Taxa Anual Média de Alojamentos','Alojamentos Vagos Total');
+
+            $_footer = array('Global',$globals['predicted_mean_tax_construction'],$globals['predicted_mean_tax_rehab'],'','','','','','','','','',$globals['predicted_empty_lodges']);
+
+            $builder = new ViewBuilder;
+            $builder->layout = false;
+            $builder->setClassName('CsvView.Csv');
+
+            // Then the view
+            $view = $builder->build($locals);
+            $view->set(compact('locals', '_serialize', '_delimiter', '_enclosure', '_newline','_extract','_header','_footer'));
 
 
-        return;
+
+            $fileName = str_replace(' ', '_', $scenarioName['name']);
+            $folder = 'uploads';
+
+            $relPath = $folder.DS.$fileName.'.csv';
+            $fullPath = WWW_ROOT.DS.$relPath;
+            $file = new File($fullPath, true, 0644);
+            $file->write($view->render());
+            $path = $file->path;
+
+        }
+
+        $url = Router::url($relPath,true);
+
+        //$this->set( json_encode(["url" => Router::url($relPath,true)]);
+        $this->set( compact('url'));
+        $this->set('_serialize',['url']);
+
     }
 
 }

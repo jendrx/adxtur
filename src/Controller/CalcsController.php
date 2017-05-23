@@ -19,32 +19,30 @@ class CalcsController extends AppController
     }
 
 
-    public function getResults()
+    public function ajaxGetResults()
+    {
+        $params = $this->request->getQueryParams();
+
+
+        $response = $this->getResults($params['domain'],$params['politic'],$params['scenario'],$params['taxes'],$params['levels'],$params['parent']);
+
+
+        $this->set(compact('response'));
+        $this->set('_serialize',['response']);
+    }
+
+    public function getResults($domain = null, $study = null, $scenario = null, $taxes = null, $levels = null ,$parent = null)
     {
         //Get request parameters(taxes,domain,politic)
-
         $this->loadModel('Studies');
 
-
-        //edited to test
-        $params = $this->request->getQueryParams();
-        $taxes = $params['taxes'];
-        $domain_id = $params['domain'];
-        $scenario_id = $params['scenario'];
-        $study_id =  $params['politic'];
-        $parent = $params['parent'];
-        $levels = $params['levels'];
-
-
-        $study_info = $this->Studies->get($study_id);
+        $study_info = $this->Studies->get($study);
         $projection_years = $study_info->projection_years;
-
-        //echo json_encode($projection_years);
 
 
         //length case study  = 1
         //find political territorial values
-        $territories = $this->filterTerritoryData($domain_id,$study_id,$scenario_id,$levels,$parent);
+        $territories = $this->filterTerritoryData($domain,$study,$scenario,$levels,$parent);
 
         // get actual globals
         $global_actual = $this->aggGlobal($territories);
@@ -56,11 +54,8 @@ class CalcsController extends AppController
 
         $global_predict = $this->getGlobalsPredict($merged,$global_actual,$projection_years);
 
-        $response = compact('global_predict','locals');
-
-        $this->set(compact('response'));
-        $this->set('_serialize',['response']);
-    }
+        return compact('global_predict','locals');
+   }
 
     private function filterTerritoryData($domain_id, $study_id, $scenario_id, $levels, $parent)
     {
@@ -138,6 +133,20 @@ class CalcsController extends AppController
         foreach($merged as $territory)
         {
 
+//            if ($territory['id'] == 411)
+//            {
+//                echo json_encode($territory);
+//                echo 'f1'.'  '.$this->formula1($territory,29);
+//                echo 'f2'.'  '.$this->formula2($territory,29);
+//                echo 'f3'.'  '.$this->formula3($territory,29);
+//                echo 'f8'.'  '.$this->formula8($territory,29);
+//
+//                echo 'f10'.'  '.$this->formula10($territory) ;
+//                echo 'f11'.' '.$this->formula11($territory,$merged,$global_actual);
+//                echo 'f13'.' '.$this->getPredictedRequiredLodges($territory,$merged,$global_actual,$projection_years);
+//                echo'';
+//            }
+
             array_push($local, (array("id" => $territory['id'],"name" => $territory['name'],"predict_tax_period_variance_lodges" => $this->getPredictedPeriodLodgeVariance($territory,$projection_years),
                 "predicted_tax_anual_mean_lodges" => $this->getPredictedAnualMeanLodgeVariance($territory,$projection_years),
                 "predicted_first_lodges" => $this->getPredictedFirstLodge($territory,$projection_years),
@@ -147,7 +156,10 @@ class CalcsController extends AppController
                 "predicted_empty_rehab_lodges" => $this->getPredictedEmptyRehabLodges($territory,$projection_years),
                 "predicted_population_variance" => $this->getPredictedPopulationVariance($territory),
                 "total_population" => $territory['total_population'],
-                "predicted_required_lodges" => $this->getPredictedRequiredLodges($territory,$merged,$global_actual,$projection_years))));
+                "predicted_required_lodges" => $this->getPredictedRequiredLodges($territory,$merged,$global_actual,$projection_years),
+                "tax_construction" => $territory['tax_construction'],
+                "tax_rehab" => $territory['tax_rehab'],
+                "tax_anual_desertion" => $territory['tax_anual_desertion'])));
         }
 
         return $local;
@@ -240,10 +252,11 @@ class CalcsController extends AppController
     }
 
 
+    // aplicação da taxa de demoliçaõ => numero de edificios que morrem ate projection_years
     private function formula1($territory,$projection_years)
     {
 
-        return $territory['actual_lodges'] * pow(1 + ($territory['tax_anual_desertion']/100), $projection_years)
+        return $territory['actual_lodges'] * pow(1 + ($territory['tax_anual_desertion']), $projection_years)
             - $territory['actual_lodges'];    // acrescentado por JMM
     }
 
@@ -276,8 +289,10 @@ class CalcsController extends AppController
 
     }
 
+    //alojamentos em 2040
     private function formula3($territory,$projection_years)
     {
+        //echo $territory['actual_lodges'];
         return $this->formula1($territory,$projection_years) + $this->formula2($territory,$projection_years) + $territory['actual_lodges'];
     }
 
@@ -354,14 +369,14 @@ class CalcsController extends AppController
         return $sum;
     }
 
-
+    //alojamentos ocupados de 1º residencia no futuro
     private function formula8($territory,$projection_years)
     {
         $input_user = $territory['tax_rehab'] / 100;
 
-        return ( $territory['tax_actual_first_lodges'] * $this->formula3($territory,$projection_years)) +
-            ( ($territory['total_actual_empty_rehab_lodges'] * pow(1 + $input_user, $projection_years) - $territory['total_actual_empty_rehab_lodges']) * $territory['tax_actual_first_lodges']) /
-            ($territory['tax_actual_first_lodges'] + $territory['tax_actual_second_lodges']);
+        return ($territory['tax_actual_first_lodges'] * $this->formula3($territory,$projection_years)) +
+            ( ($territory['total_actual_empty_rehab_lodges'] * pow(1 + $input_user, $projection_years) - $territory['total_actual_empty_rehab_lodges'])
+                * $territory['tax_actual_first_lodges']) / ($territory['tax_actual_first_lodges'] + $territory['tax_actual_second_lodges']);
     }
 
     private function result8($territories,$projection_years)
@@ -413,7 +428,7 @@ class CalcsController extends AppController
         return $sum;
     }
 
-
+    //
     private function formula11($territory,$territories,$global) {
 
         $nAlojMun = $global['total_population'] / $global['habitants_per_lodge'];
@@ -433,7 +448,7 @@ class CalcsController extends AppController
         return $sum;
     }
 
-
+    //alojamentos oucpados necessários
     private function formula13($territory,$territories,$global,$projection_years) {
 
         return - ($this->formula11($territory,$territories,$global)) + ($this->formula8($territory,$projection_years));
@@ -543,7 +558,7 @@ class CalcsController extends AppController
 
     private function getTotal($array = null)
     {
-        $final =array();
+        $final = array();
 
         foreach($array as $value)
             $final  = array_merge($final,$value);

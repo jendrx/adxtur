@@ -12,13 +12,25 @@
 	</div>
 </div>
 <div class="col-md-3">
-	<div class="table-responsive">
-		<table class="table" id="table_territorials">
-		</table>
+	<div class="row">
+		<div class="">
+		<div class="table-responsive">
+			<table class="table" id="table_territorials">
+			</table>
+		</div>
+		</div>
 		<br>
-		<p align="center">
-			<input id="calc_politic_tax" class="button" type="button" value="Calcular">
-		</p>
+		<div class="row">
+			<div class="col-md-4">
+				<input id="calc_politic_tax" class="button btn-block" type="button" value="Calcular">
+			</div>
+			<div class="col-md-4">
+				<input type="button" class="button btn-block" id="save_taxes" value="Save" />
+			</div>
+			<div class="col-md-4">
+				<input id="export_btn" class="button btn-block" type="button" value="Export"/>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -45,7 +57,7 @@
 
 		<div class="col-md-3">
 			<br>
-			<input type="button" id="export_btn" value="Export" />
+			<input id="export_btn" type="button" value="Export"/>
 		</div>
 
 
@@ -55,8 +67,9 @@
 
 <script>
     $(document).ready(function () {
+
             var domain_data = <?php echo json_encode($current_domain);?>;
-            var territories = <?php echo json_encode($territories);?>;
+            //var territories = <?php echo json_encode($territories);?>;
             var start_view = <?php echo($start_view);?>;
 
             init(domain_data);
@@ -74,7 +87,7 @@
             $("#sel_studies").change(function () {
                 var scenario_id = $("#sel_scenarios").val();
                 var study_id = $(this).val();
-                getScenarios(study_id);
+                getScenarios(study_id,refreshScenarioDropDown);
                 removeTableRows('table_territorials');
                 getStudyTaxes(null, study_id, scenario_id, domain_data.types.length, null, load_table_data);
 
@@ -94,12 +107,13 @@
                 var scenario_id = $("#sel_scenarios").val();
                 var study_id = $('#sel_studies').val();
 
-                getStudyTaxes(null, study_id, scenario_id, domain_data.types.length, null, function(data)
+                getStudyTaxes(domain_data.id, study_id, scenario_id, domain_data.types.length, null, function(data)
                 {
-                    getTerritorialResults(domain_data.id,study_id,scenario_id,data,1,null,function(data)
-                    {
-                        exportCsv(study_id,scenario_id,data);
+                    getTerritorialResults(domain_data.id, study_id, scenario_id, data, domain_data.types.length, null,
+	                    function(domain_id,study_id,scenario_id,levels,parent_id,data) {
+                        exportCsv(study_id,scenario_id,data.response);
                     });
+
                 });
 
             });

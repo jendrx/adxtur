@@ -11,9 +11,6 @@ function showResults(domain_id,study_id,scenario_id,levels,parent_id,data)
     fill_resume(data.response.global_predict);
 }
 
-
-
-
 function fill_resume(globals) {
     $('#popResidente').val(Math.round(globals.predicted_total_population));
     $('#migrantes').val((globals.predicted_migrations));
@@ -224,7 +221,7 @@ function getTerritorialResults(domain_id, study_id, scenario_id, taxes, levels, 
     $.ajax(
         {
             type: 'get',
-            url: '/Calcs/getResults.json',
+            url: '/Calcs/ajaxGetResults.json',
             data: {
                 domain: domain_id,
                 politic: study_id,
@@ -244,17 +241,30 @@ function getTerritorialResults(domain_id, study_id, scenario_id, taxes, levels, 
 
 
 function init(data) {
-
-    console.log(data);
     if(data.studies.length === 0 || data.scenarios.length === 0)
     {
         alert('Insuficient data (Studies data or Scenarios Data)');
 
         window.location.replace("/homes/index");
     }
+
     var levels = data.types.length;
     var parent = null;
+
     var study_id = $("#sel_studies").val();
+
+
+    // initialize table and dropdown
+    getScenarios(study_id, function(data) {
+        refreshScenarioDropDown(data);
+
+        var scenario_id = $("sel_scenarios").val();
+        getStudyTaxes(null,study_id,scenario_id, levels, parent,function(data)
+        {
+            load_table_data(data);
+        });
+    });
+
 }
 
 function updateTaxes(study_id, table_data) {
@@ -274,7 +284,7 @@ function updateTaxes(study_id, table_data) {
 
 }
 
-function getScenarios(study_id) {
+function getScenarios(study_id,callback) {
     $.ajax(
         {
             type: 'get',
@@ -284,13 +294,7 @@ function getScenarios(study_id) {
                 study: study_id
             },
             success:function(data) {
-                $('#sel_scenarios').find('option').remove();
-
-                $.each(data.content,function(key,val)
-                {
-                    $('#sel_scenarios').append($('<option>',{'text':val, 'val':key}));
-                });
-
+                callback(data);
             }
 
 
@@ -298,22 +302,40 @@ function getScenarios(study_id) {
     );
 }
 
+function refreshScenarioDropDown(data)
+{
+
+    $('#sel_scenarios').find('option').remove();
+
+    $.each(data.content,function(key,val)
+    {
+        $('#sel_scenarios').append($('<option>',{'text':val, 'val':key}));
+    });
+}
+
+
 function exportCsv(study_id,scenario_id,data)
 {
+
     $.ajax(
-    {
-        type: 'get',
-        url: 'homes/exportCsv',
-        dataType: 'json',
-        data: {
-
-        },
-        success: function(data)
         {
-            console.log(data);
+            type: 'post',
+            url: '/homes/exportCsv',
+            dataType: 'json',
+            data: {
+                study: study_id,
+                scenario: scenario_id,
+                studiesTerritoriesDomains: data
+            },
+            success: function(data)
+            {
+                $("#test_div").append(data);
+                console.log(data);
+                window.location.replace(data.url);
+                //console.log(data);
+
+            }
         }
+    );
 
-
-    }
-);
 }

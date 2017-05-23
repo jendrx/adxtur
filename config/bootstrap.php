@@ -218,6 +218,7 @@ Type::build('timestamp')
  * Debug Kit should not be installed on a production system
  */
 if (Configure::read('debug')) {
+    Plugin::load('CsvView');
     Plugin::load('DebugKit', ['bootstrap' => true]);
 }
 
