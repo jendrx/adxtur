@@ -1,9 +1,6 @@
 <?php echo $this->Html->script(['map','territorial-table','view-data','home-view']); ?>
 
 <div class="row-fluid">
-
-	<div id="test_div">
-	</div>
 	<div class="col-md-2">
 		<h4> Ano de referência 2040</h4>
 		<?=$this->element('resumeResults')?>
