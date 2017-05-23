@@ -120,7 +120,7 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
 
                 }
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'homes','action' => 'index']);
             }
 
 

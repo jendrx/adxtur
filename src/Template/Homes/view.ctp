@@ -44,7 +44,7 @@
 		</div>
 		<div class="col-md-3">
 			<br>
-			<input type="button" id="mod_rules" value="Modify Rules" />
+			<?= $this->Html->link(__('New Study'), ['controller'=> 'studies', 'action' => 'add', $current_domain['id']])?>
 		</div>
 
 	</div>
