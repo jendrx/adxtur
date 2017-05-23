@@ -47,19 +47,8 @@
 		</div>
 		<div class="col-md-3">
 			<br>
-			<input type="button" id="save_taxes" value="Save Taxes" />
-		</div>
-
-		<div class="col-md-3">
-			<br>
 			<input type="button" id="mod_rules" value="Modify Rules" />
 		</div>
-
-		<div class="col-md-3">
-			<br>
-			<input id="export_btn" type="button" value="Export"/>
-		</div>
-
 
 	</div>
 
