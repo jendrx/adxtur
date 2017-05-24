@@ -44,6 +44,9 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
 
+        $this->loadComponent('Auth',['loginRedirect' => ['controller' => 'Homes', 'action' => 'index'],
+                            'logoutRedirect' => ['controller' => 'Domains', 'action' => 'index']]);
+
         /*
          * Enable the following components for recommended CakePHP security settings.
          * see http://book.cakephp.org/3.0/en/controllers/components/security.html
@@ -52,6 +55,14 @@ class AppController extends Controller
         //$this->loadComponent('Csrf');
     }
 
+
+    //BeforeFilter() function was to tell the AuthComponent to not require a login for all index() and view() actions, in every controller.
+    //We want our visitors to be able to read and list the entries without registering in the site.
+
+//    public function beforeFilter(Event $event)
+//    {
+//        $this->Auth->allow(['index','view','display']);
+//    }
     /**
      * Before render callback.
      *
