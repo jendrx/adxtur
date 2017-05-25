@@ -16,7 +16,7 @@ class HomesController extends AppController
 {
     public function index()
     {
-        $this->viewBuilder()->setLayout('home_layout');
+        $this->viewBuilder()->setLayout('homeLayout');
         $this->loadModel('Domains');
 
         // get domains by user list
@@ -28,7 +28,7 @@ class HomesController extends AppController
 
     public function view($id = null)
     {
-        $this->viewBuilder()->setLayout('home_layout');
+        $this->viewBuilder()->setLayout('homeLayout');
         $this->loadModel('Domains');
 
         $current_domain = $this->Domains->get($id, array('contain' => array('Studies','Scenarios','Features','Types')));
