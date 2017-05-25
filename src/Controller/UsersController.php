@@ -52,7 +52,7 @@ class UsersController extends AppController
     {
         $user = $this->Auth->user();
 
-        $this->viewBuilder()->setLayout('home_layout');
+        $this->viewBuilder()->setLayout('unloggedLayout');
 
         if($this->request->is('post'))
         {

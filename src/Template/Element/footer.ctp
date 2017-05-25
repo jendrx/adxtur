@@ -6,5 +6,4 @@ padding-top:20px;" >
     <div class="container">
         <p> By rom @getIN</p>
     </div>
-
 </footer>
