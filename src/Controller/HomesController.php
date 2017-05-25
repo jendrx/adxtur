@@ -27,13 +27,14 @@ class HomesController extends AppController
 
     public function index()
     {
+        $user = $this->Auth->user();
         $this->viewBuilder()->setLayout('homeLayout');
         $this->loadModel('Domains');
 
         // get domains by user list
         $domains = $this->Domains->find('all');
-        $this->set(compact('domains'));
-        $this->set('_serialize', ['domains']);
+        $this->set(compact('domains','user'));
+        $this->set('_serialize', ['domains','user']);
 
     }
 

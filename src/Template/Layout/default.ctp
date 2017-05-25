@@ -22,6 +22,17 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 </head>
 <body style="height:100%">
 <div id="wrap" style="min-height:100%">
+    <?php
+    if ($user):
+        if ($user['role'] === 'admin'):
+            echo $this->element('admin_header');
+        else:
+            echo $this->element('header');
+    endif;
+
+
+    endif;
+    ?>
     <?= $this->element('header') ?>
 	<div class="container-fluid" style="padding-bottom: 10%;overflow: auto">
 
