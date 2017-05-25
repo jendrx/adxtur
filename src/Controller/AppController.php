@@ -56,6 +56,10 @@ class AppController extends Controller
          */
         //$this->loadComponent('Security');
         //$this->loadComponent('Csrf');
+
+        $user = $this->Auth->user();
+        $this->set(compact('user'));
+        $this->set('_serialize',['user']);
     }
 
 

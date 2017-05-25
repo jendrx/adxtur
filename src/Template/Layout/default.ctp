@@ -23,7 +23,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body style="height:100%">
 <div id="wrap" style="min-height:100%">
     <?php
-    if ($user):
+    if ($user !== null):
         if ($user['role'] === 'admin'):
             echo $this->element('admin_header');
         else:
@@ -33,14 +33,10 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
     endif;
     ?>
-    <?= $this->element('header') ?>
 	<div class="container-fluid" style="padding-bottom: 10%;overflow: auto">
 
 		<div class="row-fluid">
-
-
             <?= $this->Flash->render() ?>
-
 			<div class="col-md-4">
                 <?= $this->element('sidebar') ?>
 			</div>

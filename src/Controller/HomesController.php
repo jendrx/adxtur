@@ -33,8 +33,8 @@ class HomesController extends AppController
 
         // get domains by user list
         $domains = $this->Domains->find('all');
-        $this->set(compact('domains','user'));
-        $this->set('_serialize', ['domains','user']);
+        $this->set(compact('domains'));
+        $this->set('_serialize', ['domains']);
 
     }
 

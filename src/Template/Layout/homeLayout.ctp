@@ -23,10 +23,16 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body style="height:100%">
 <div id ="wrap" style="min-height:100%;">
 	<?php
-	if ($user)
-		echo $this->element('header');
+    if ($user):
+        if ($user['role'] === 'admin'):
+            echo $this->element('admin_header');
+        else:
+            echo $this->element('header');
+        endif;
 
-	?>
+
+    endif;
+    ?>
     <div class="container-fluid" style="overflow: auto;padding-bottom: 10%;">
         <?= $this->Flash->render() ?>
         <?= $this->fetch('content') ?>
