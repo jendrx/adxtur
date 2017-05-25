@@ -20,6 +20,17 @@ class UsersController extends AppController
         $this->Auth->allow('add', 'logout');
     }
 
+    public function isAuthorized($user)
+    {
+        // Admin can access every action
+        if (in_array($this->request->getParam('action'), ['index', 'add','login','logout'])) {
+            return true;
+        }
+
+        return parent::isAuthorized($user);
+    }
+
+
     public function index()
     {
         $this->set('users', $this->Users->find('all'));

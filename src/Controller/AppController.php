@@ -45,10 +45,10 @@ class AppController extends Controller
         $this->loadComponent('Flash');
 
         $this->loadComponent('Auth',
-                            ['loginRedirect' =>
-                                ['controller' => 'Homes', 'action' => 'index'],
+                            ['authorize' => ['Controller'],'loginRedirect' =>
+                                ['controller' => 'homes', 'action' => 'index'],
                                 'logoutRedirect' =>
-                                    ['controller' => 'Domains', 'action' => 'index']]);
+                                    ['controller' => 'users', 'action' => 'login']]);
 
         /*
          * Enable the following components for recommended CakePHP security settings.
@@ -79,6 +79,18 @@ class AppController extends Controller
         ) {
             $this->set('_serialize', true);
         }
+    }
+
+    public function isAuthorized($user)
+    {
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+
+
+        // Default deny
+        return false;
     }
 
     public function uploadFile($folder, $formdata, $itemId = null)
