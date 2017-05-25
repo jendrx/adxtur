@@ -5,6 +5,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
  * Domains Model
@@ -96,5 +97,32 @@ class DomainsTable extends Table
             ->allowEmpty('type');
 
         return $validator;
+    }
+
+
+    public function getTerritories($id = null,$fields = null)
+    {
+        if ($fields === null) {
+            $domain = $this->get($id, ['contain' => ['Territories']]);
+        }
+        else{
+            array_push($fields,'TerritoriesDomains.domain_id');
+            $domain = $this->get($id, ['contain' => ['Territories' =>['fields' => $fields]]]);
+        }
+
+        echo json_encode( $domain['territories']);
+    }
+
+    public function getStudies($id = null)
+    {
+        $domain =$this->get($id,['contain' =>['Studies']]);
+        return $domain['studies'];
+
+    }
+
+    public function getScenarios($id = null)
+    {
+        $domain =$this->get($id,['contain' =>['Scenarios']]);
+        return $domain['scenarios'];
     }
 }
