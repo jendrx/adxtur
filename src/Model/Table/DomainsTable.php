@@ -115,6 +115,7 @@ class DomainsTable extends Table
 
     public function getStudies($id = null)
     {
+
         $domain =$this->get($id,['contain' =>['Studies']]);
         return $domain['studies'];
 
