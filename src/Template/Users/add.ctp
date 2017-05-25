@@ -1,5 +1,4 @@
 <!-- src/Template/Users/add.ctp -->
-
 <div class="users form">
     <?= $this->Form->create($user) ?>
     <fieldset>

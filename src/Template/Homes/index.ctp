@@ -32,17 +32,6 @@
 
 
     <?php endforeach; ?>
-
-	<!-- test export csv -->
-	<!--<div>
-        <?= $this->Html->link('export', [
-            'controller' => 'homes',
-            'action' => 'exportCsv',
-	        '_ext' => 'csv',
-
-
-        ]) ?>
-	</div>-->
 </div>
 
 

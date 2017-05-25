@@ -22,7 +22,7 @@ class UsersTable extends Table
         $this->setPrimaryKey('id');
     }
 
-    public function validationDefault($validator)
+    public function validationDefault(Validator $validator)
     {
         return $validator
             ->notEmpty('username', 'A username is required')

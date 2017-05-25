@@ -50,6 +50,10 @@ class UsersController extends AppController
 
     public function login()
     {
+        $user = $this->Auth->user();
+
+        $this->viewBuilder()->setLayout('home_layout');
+
         if($this->request->is('post'))
         {
             $user = $this->Auth->identify();
@@ -60,6 +64,9 @@ class UsersController extends AppController
             }
             $this->Flash->error(__('Invalid username or password, try again'));
         }
+
+        $this->set(compact('user'));
+        $this->set('_serialize',['user']);
     }
 
     public function logout()
