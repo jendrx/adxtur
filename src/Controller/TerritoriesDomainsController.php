@@ -10,7 +10,6 @@ use App\Controller\AppController;
  */
 class TerritoriesDomainsController extends AppController
 {
-
     /**
      * Index method
      *

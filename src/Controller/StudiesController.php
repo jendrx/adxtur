@@ -13,7 +13,7 @@ class StudiesController extends AppController
 
     public function isAuthorized($user)
     {
-        if(isset($user['role']) && $user['role'] === 'user' && in_array($this->request->getParam('action'), ['index', 'view']) )
+        if(isset($user['role']) && $user['role'] === 'user')
         {
             return true;
         }

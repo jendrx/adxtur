@@ -10,24 +10,6 @@ use App\Controller\AppController;
  */
 class DomainsController extends AppController
 {
-
-    public function isAuthorized($user)
-    {
-        // All registered users can add articles
-
-
-
-        // The owner of an article can edit and delete it
-        if (in_array($this->request->getParam('action'), ['edit', 'delete'])) {
-            $articleId = (int)$this->request->getParam('pass.0');
-            if ($this->Articles->isOwnedBy($articleId, $user['id'])) {
-                return true;
-            }
-        }
-
-        return parent::isAuthorized($user);
-    }
-
     /**
      * Index method
      *
@@ -157,7 +139,6 @@ class DomainsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-
 
     public function getTypes($id = null)
     {
