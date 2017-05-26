@@ -114,6 +114,15 @@ class TerritoriesTable extends Table
         return $rules;
     }
 
+    public function getInfo($id = null, $options = null)
+    {
+        if($options !== null)
+        {
+            return  $this->get($id,['fields' => $options]);
+        }
+        return $this->get($id);
+    }
+
     public function getGeoJson($id = null)
     {
         $geoJson = $this->get($id,['fields' => ['geom_geojson']]);

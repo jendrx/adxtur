@@ -72,9 +72,11 @@ class UsersController extends AppController
         }
 
 
+        $this->loadModel('Studies');
+
         $this->loadModel('Territories');
 
-        echo json_encode($this->Territories->getParent(411,['name','geom_geojson']));
+        $this->Studies->getTaxes(1);
 
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);

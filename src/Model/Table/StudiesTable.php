@@ -1,16 +1,16 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
  * Studies Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Domains
- * @property \Cake\ORM\Association\HasMany $StudiesRulesTerritorialsDomains
+ * @property \Cake\ORM\Association\HasMany $StudiesRulesTerritoriesDomains
  * @property \Cake\ORM\Association\BelongsToMany $TerritoriesDomains
  *
  * @method \App\Model\Entity\Study get($primaryKey, $options = [])
@@ -47,7 +47,7 @@ class StudiesTable extends Table
         $this->belongsToMany('TerritoriesDomains', [
             'foreignKey' => 'study_id',
             'targetForeignKey' => 'territory_domain_id',
-            'through' => 'studies_territories_domains'
+            'joinTable' => 'studies_territories_domains' // change to joinTable to test -- 26/05/2017
         ]);
     }
 
@@ -93,11 +93,17 @@ class StudiesTable extends Table
         return $rules;
     }
 
+    // return an array with taxes by territory {tax_construct, tax_rehab, tax_anual_desertion,territory_name, territory_id, territoru_domain_id}
     public function getTaxes($id = null)
     {
+        $territoriesTaxes = $this->find('all',['conditions' => ['Studies.id = ' => $id]])
+            ->select([ 'tax_rehab' => 'taxes.tax_rehab', 'tax_construction' => 'taxes.tax_construction', 'tax_anual_desertion' => 'taxes.tax_anual_desertion',
+                'territory_domain_id' => 'territories_domains.id', 'territory_id' => 'territories_domains.territory_id', 'territory_name' => 'Territories.name'])
+            ->enableAutoFields(false)
+            ->join(['table' => 'studies_territories_domains', 'alias' => 'taxes', 'conditions' => ['taxes.study_id = Studies.id']])
+            ->join(['table' => 'territories_domains', 'conditions' => ['taxes.territory_domain_id = territories_domains.id']])
+            ->join(['table' => 'territories', 'conditions' => ['territories_domains.territory_id = territories.id'], 'fields' => ['name']]);
 
-        $taxes = $this->StudiesRulesTerritoriesDomains->find('all');
-
-        echo json_encode($taxes);
+        return $territoriesTaxes;
     }
 }
