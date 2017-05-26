@@ -71,10 +71,10 @@ class UsersController extends AppController
             $this->Flash->error(__('Invalid username or password, try again'));
         }
 
-        $this->loadModel('Domains');
 
-            $this->Domains->getTerritories(1,['Territories.id']);
+        $this->loadModel('Territories');
 
+        echo json_encode($this->Territories->getParent(411,['name','geom_geojson']));
 
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);

@@ -111,7 +111,37 @@ class TerritoriesTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['parent_id'], 'ParentTerritories'));
-
         return $rules;
     }
+
+    public function getGeoJson($id = null)
+    {
+        $geoJson = $this->get($id,['fields' => ['geom_geojson']]);
+        return $geoJson;
+
+    }
+
+    public function getChildren($id = null)
+    {
+        $children = $this->find('all',['conditions' => ['parent_id = ' => $id]]);
+        return $children;
+    }
+
+    public function getParent($id = null, $options = null)
+    {
+        $parentId = $this->get($id)['parent_id'];
+        if ($parentId === null)
+        {
+            return $parentId;
+        }
+        if ($options !== null)
+        {
+            return $this->get($parentId,['fields' => $options]);
+        }
+        return  $this->get($parentId);
+    }
+
+
+
+
 }

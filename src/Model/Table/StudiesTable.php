@@ -92,4 +92,12 @@ class StudiesTable extends Table
 
         return $rules;
     }
+
+    public function getTaxes($id = null)
+    {
+
+        $taxes = $this->StudiesRulesTerritoriesDomains->find('all');
+
+        echo json_encode($taxes);
+    }
 }
