@@ -94,8 +94,19 @@ class StudiesTable extends Table
     }
 
     // return an array with taxes by territory {tax_construct, tax_rehab, tax_anual_desertion,territory_name, territory_id, territoru_domain_id}
-    public function getTaxes($id = null)
+    public function getTaxes($id = null, $territories = null)
     {
+        $territoriesTaxes = array();
+        if($territories != null)
+        {
+            foreach ($territories as $territory)
+            {
+                array_push($territoriesTaxes, $this->getTerritoryTaxes($id,$territory));
+            }
+
+            return $territoriesTaxes;
+        }
+
         $territoriesTaxes = $this->find('all',['conditions' => ['Studies.id = ' => $id]])
             ->select([ 'tax_rehab' => 'taxes.tax_rehab', 'tax_construction' => 'taxes.tax_construction', 'tax_anual_desertion' => 'taxes.tax_anual_desertion',
                 'territory_domain_id' => 'territories_domains.id', 'territory_id' => 'territories_domains.territory_id', 'territory_name' => 'Territories.name'])
@@ -105,5 +116,18 @@ class StudiesTable extends Table
             ->join(['table' => 'territories', 'conditions' => ['territories_domains.territory_id = territories.id'], 'fields' => ['name']]);
 
         return $territoriesTaxes;
+    }
+
+    public function getTerritoryTaxes($id, $territory)
+    {
+        $territoryTaxes = $this->find('all',['conditions' => ['Studies.id = ' => $id]])
+            ->select([ 'tax_rehab' => 'taxes.tax_rehab', 'tax_construction' => 'taxes.tax_construction', 'tax_anual_desertion' => 'taxes.tax_anual_desertion',
+                'territory_domain_id' => 'territories_domains.id', 'territory_id' => 'territories_domains.territory_id', 'territory_name' => 'Territories.name'])
+            ->enableAutoFields(false)
+            ->join(['table' => 'studies_territories_domains', 'alias' => 'taxes', 'conditions' => ['taxes.study_id = Studies.id','taxes.territory_domain_id =' => $territory]])
+            ->join(['table' => 'territories_domains', 'conditions' => ['taxes.territory_domain_id = territories_domains.id']])
+            ->join(['table' => 'territories', 'conditions' => ['territories_domains.territory_id = territories.id'], 'fields' => ['name']])->first();
+
+        return $territoryTaxes;
     }
 }
