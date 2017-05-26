@@ -113,4 +113,41 @@ class StudiesTerritoriesDomainsTable extends Table
 
         return $rules;
     }
+
+    public function getTaxesByStudy($id = null, $territories = null)
+    {
+        $territoriesTaxes = array();
+        if($territories != null)
+        {
+            foreach ($territories as $territory)
+            {
+                array_push($territoriesTaxes, $this->getTerritoryTaxesByStudy($id,$territory));
+            }
+
+            return $territoriesTaxes;
+        }
+
+        $territoriesTaxes = $this->find('all',['conditions' => ['StudiesTerritoriesDomains.study_id = ' => $id]])
+            ->select([ 'tax_rehab' => 'StudiesTerritoriesDomains.tax_rehab', 'tax_construction' => 'StudiesTerritoriesDomains.tax_construction',
+                'tax_anual_desertion' => 'StudiesTerritoriesDomains.tax_anual_desertion', 'territory_domain_id' => 'territories_domains.id',
+                'territory_id' => 'territories_domains.territory_id', 'territory_name' => 'Territories.name'])
+            ->enableAutoFields(false)
+            ->join(['table' => 'territories_domains', 'conditions' => ['StudiesTerritoriesDomains.territory_domain_id = territories_domains.id']])
+            ->join(['table' => 'territories', 'conditions' => ['territories_domains.territory_id = territories.id'], 'fields' => ['name']]);
+
+        return $territoriesTaxes;
+    }
+
+    public function getTerritoryTaxesByStudy($id, $territory)
+    {
+        $territoryTaxes = $this->find('all',['conditions' => ['StudiesTerritoriesDomains.study_id = ' => $id, 'StudiesTerritoriesDomains.territory_domain_id = ' => $territory ]])
+            ->select([ 'tax_rehab' => 'StudiesTerritoriesDomains.tax_rehab', 'tax_construction' => 'StudiesTerritoriesDomains.tax_construction',
+                'tax_anual_desertion' => 'StudiesTerritoriesDomains.tax_anual_desertion', 'territory_domain_id' => 'territories_domains.id',
+                'territory_id' => 'territories_domains.territory_id', 'territory_name' => 'Territories.name'])
+            ->enableAutoFields(false)
+            ->join(['table' => 'territories_domains', 'conditions' => ['StudiesTerritoriesDomains.territory_domain_id = territories_domains.id']])
+            ->join(['table' => 'territories', 'conditions' => ['territories_domains.territory_id = territories.id'], 'fields' => ['name']])->first();
+
+        return $territoryTaxes;
+    }
 }

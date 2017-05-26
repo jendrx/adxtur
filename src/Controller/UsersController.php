@@ -72,12 +72,12 @@ class UsersController extends AppController
         }
 
 
-        $this->loadModel('Studies');
+        $this->loadModel('StudiesTerritoriesDomains');
 
         $this->loadModel('Territories');
 
 
-        echo json_encode($this->Studies->getTaxes(1,[4,3,7]));
+        echo json_encode($this->StudiesTerritoriesDomains->getTaxesByStudy(1,[4,3,7]));
 
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);

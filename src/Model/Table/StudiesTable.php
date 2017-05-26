@@ -130,4 +130,32 @@ class StudiesTable extends Table
 
         return $territoryTaxes;
     }
+
+    public function getTerritories($id = null ,$options = null)
+    {
+        $territories = array();
+        if ($options !== null)
+        {
+            $territories = $this->find('all',['conditions' => ['Studies.id = ' => $id]])
+                ->select([ 'tax_rehab' => 'taxes.tax_rehab', 'tax_construction' => 'taxes.tax_construction', 'tax_anual_desertion' => 'taxes.tax_anual_desertion',
+                    'territory_domain_id' => 'territories_domains.id', 'territory_id' => 'territories_domains.territory_id', 'territory_name' => 'Territories.name'])
+                ->enableAutoFields(false)
+                ->join(['table' => 'studies_territories_domains', 'alias' => 'taxes', 'conditions' => ['taxes.study_id = Studies.id']])
+                ->join(['table' => 'territories_domains', 'conditions' => ['taxes.territory_domain_id = territories_domains.id']])
+                ->join(['table' => 'territories', 'conditions' => ['territories_domains.territory_id = territories.id'], 'fields' => $options]);
+
+            return $territories;
+        }
+
+        $territories = $this->find('all',['conditions' => ['Studies.id = ' => $id]])
+            ->select([ 'tax_rehab' => 'taxes.tax_rehab', 'tax_construction' => 'taxes.tax_construction', 'tax_anual_desertion' => 'taxes.tax_anual_desertion',
+                'territory_domain_id' => 'territories_domains.id', 'territory_id' => 'territories_domains.territory_id', 'territory_name' => 'Territories.name'])
+            ->enableAutoFields(false)
+            ->join(['table' => 'studies_territories_domains', 'alias' => 'taxes', 'conditions' => ['taxes.study_id = Studies.id']])
+            ->join(['table' => 'territories_domains', 'conditions' => ['taxes.territory_domain_id = territories_domains.id']])
+            ->join(['table' => 'territories', 'conditions' => ['territories_domains.territory_id = territories.id'], 'fields' => ['name']]);
+
+        return $territories;
+    }
+
 }
