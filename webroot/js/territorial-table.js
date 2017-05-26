@@ -30,7 +30,7 @@ function load_table_data(data, type_admin) {
         var $cons_input  = $('<input>', {"class":"tax_cons_input","type":"number","min":0,"max":10, "step":0.5, "value":value['tax_construction']});
         var $rehab_input = $('<input>', {"class":"tax_rehab_input","type":"number","min":0,"max":10, "step":0.5, "value":value['tax_rehab']});
         var $demo_input = $('<input>', {"class":"tax_rehab_input","type":"number","min":0,"max":10, "step":0.5, "value":value['tax_anual_desertion'],'disabled':'true','style':'width:auto'});
-        $("#table_territorials > tbody:last-child").append('<tr><td><label class = "label_input" value="' + value["id"] + '">' + value['territory'] + '</td>' +
+        $("#table_territorials > tbody:last-child").append('<tr><td><label class = "label_input" value="' + value["territory_id"] + '">' + value['territory_name'] + '</td>' +
             '<td>' + $cons_input.prop('outerHTML') + ' </td><td>' + $rehab_input.prop('outerHTML') + '</td><td>' + $demo_input.prop('outerHTML') + '</td></tr>')
     });
 }

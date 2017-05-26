@@ -71,14 +71,6 @@ class UsersController extends AppController
             $this->Flash->error(__('Invalid username or password, try again'));
         }
 
-
-        $this->loadModel('StudiesTerritoriesDomains');
-
-        $this->loadModel('Territories');
-
-
-        echo json_encode($this->StudiesTerritoriesDomains->getTaxesByStudy(1,[4,3,7]));
-
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }

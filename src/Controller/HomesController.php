@@ -54,53 +54,11 @@ class HomesController extends AppController
         $this->set('_serialize', ['current_domain','studies','scenarios','territories','start_view']);
     }
 
-    public function getPoliticTaxesBack()
-    {
-        $this->loadModel('StudiesTerritoriesDomains');
 
-        $params = $this->request->getQueryParams();
-        $study_id = $params['study'];
-        $level = $params['level'];
-        $parent= $params['parent'];
-
-        $conditions = array();
-        if($level > 1)
-        {
-            if($parent == null)
-            {
-                $conditions = array('parish is null');
-            }
-            else
-            {
-                $conditions = array('parish is  not null', 'parent_id = ' => $parent);
-            }
-        }
-
-        $study = $this->StudiesTerritoriesDomains->find('all',['conditions' => ['study_id' => $study_id]])
-            ->contain(['TerritoriesDomains' => ['Territories' => ['conditions' => $conditions ,'fields' => ['id','name']]]]);
-
-        $study_taxes = array();
-
-        foreach ($study as $study_territory)
-        {
-            $tax_rehab = round($study_territory->tax_rehab,3);
-            $tax_construction = round($study_territory->tax_construction,3);
-            $tax_anual_desertion = round($study_territory->tax_anual_desertion,3);
-
-            array_push($study_taxes,array_merge(['territory'=> $study_territory->territories_domain->territory->name ],
-                ['id' => $study_territory->territories_domain->territory->id]
-                ,['tax_rehab' => $tax_rehab],
-                ['tax_construction' => $tax_construction],['tax_anual_desertion' => $tax_anual_desertion]));
-        }
-        $response = $study_taxes;
-        $this->set(compact('response'));
-        $this->set('_serialize',['response']);
-    }
-
+    // updated function, missing level treatement
     public function getPoliticTaxes()
     {
         $this->loadModel('StudiesTerritoriesDomains');
-
         $this->loadModel('Studies');
 
         $params = $this->request->getQueryParams();
@@ -109,37 +67,23 @@ class HomesController extends AppController
         $parent= $params['parent'];
 
         $conditions = array();
-        if($level > 1)
-        {
-            if($parent == null)
-            {
-                $conditions = array('parish is null');
-            }
-            else
-            {
-                $conditions = array('parish is  not null', 'parent_id = ' => $parent);
-            }
-        }
-
-        $study = $this->StudiesTerritoriesDomains->find('all',['conditions' => ['study_id' => $study_id]])
-            ->contain(['TerritoriesDomains' => ['Territories' => ['conditions' => $conditions ,'fields' => ['id','name']]]]);
+//        if($level > 1)
+//        {
+//            if($parent == null)
+//            {
+//                $conditions = array('parish is null');
+//            }
+//            else
+//            {
+//                $conditions = array('parish is  not null', 'parent_id = ' => $parent);
+//            }
+//        }
+//
+//        $study = $this->StudiesTerritoriesDomains->find('all',['conditions' => ['study_id' => $study_id]])
+//            ->contain(['TerritoriesDomains' => ['Territories' => ['conditions' => $conditions ,'fields' => ['id','name']]]]);
 
         $study_taxes = array();
-
-        echo json_encode($study);
-        foreach ($study as $study_territory)
-        {
-
-            $tax_rehab = round($study_territory->tax_rehab,3);
-            $tax_construction = round($study_territory->tax_construction,3);
-            $tax_anual_desertion = round($study_territory->tax_anual_desertion,3);
-
-            array_push($study_taxes,array_merge(['territory'=> $study_territory->territories_domain->territory->name ],
-                ['id' => $study_territory->territories_domain->territory->id]
-                ,['tax_rehab' => $tax_rehab],
-                ['tax_construction' => $tax_construction],['tax_anual_desertion' => $tax_anual_desertion]));
-        }
-        $response = $study_taxes;
+        $response = $this->StudiesTerritoriesDomains->getTaxesbyStudy($study_id,$this->Studies->getTerritories($study_id));
         $this->set(compact('response'));
         $this->set('_serialize',['response']);
     }
