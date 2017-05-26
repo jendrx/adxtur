@@ -450,7 +450,7 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
             foreach($territories_taxes as $territory_tax)
             {
                 $territoryDomain = $this->StudiesTerritoriesDomains->TerritoriesDomains->find('all',
-                    ['conditions' => ['domain_id = ' => $study_info->domain_id,'territory_id = ' => $territory_tax['id']]]);
+                    ['conditions' => ['domain_id = ' => $study_info->domain_id,'territory_id = ' => $territory_tax['territory_id']]]);
 
                 $studiesTerritoriesDomainsInfo = $this->StudiesTerritoriesDomains->find('all',
                     ['conditions' =>['study_id = ' => $study_id,'territory_domain_id = ' => $territoryDomain->select('id')->first()->id]]);

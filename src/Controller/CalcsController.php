@@ -77,22 +77,10 @@ class CalcsController extends AppController
             {
                 $conditions = array('Territories.parish' => null);
 
-                /*$territory_study_values = $this->TerritoriesDomains->find('all',['conditions' => ['domain_id = ' => $domain_id]])->select('id','territory_id')
-                    ->contain(['Territories' => ['conditions' => ['Territories.parish ' => null ],'fields' =>['id','name']]])
-                    ->contain(['Scenarios' => ['conditions' => ['Scenarios.id = ' => $scenario_id],'fields' => ['id', 'ScenariosTerritoriesDomains.territory_domain_id']]])
-                    ->contain(['Studies' => ['conditions' => ['Studies.id = ' => $study_id],'fields' => []]]);
-                */
             }
             else
             {
                 $conditions = array('Territories.parish is not null','Territories.parent_id =' => $parent);
-
-                /*$territory_study_values = $this->TerritoriesDomains->find('all',['conditions' => ['domain_id = ' => $domain_id]])->select('id','territory_id')
-                    ->contain(['Territories' => ['conditions' => ['Territories.parish is  not null','Territories.municipality = ' => $parent],'fields' =>['id','name']]])
-                    ->contain(['Scenarios' => ['conditions' => ['Scenarios.id = ' => $scenario_id],'fields' => ['id', 'ScenariosTerritoriesDomains.territory_domain_id']]])
-                    ->contain(['Studies' => ['conditions' => ['Studies.id = ' => $study_id],'fields' => []]]);
-                */
-
             }
         }
 
@@ -554,7 +542,7 @@ class CalcsController extends AppController
         {
             foreach ($taxes as $tax_row)
             {
-                if ($tax_row['id'] == $territory['id'])
+                if ($tax_row['territory_id'] == $territory['id'])
                 {
                     $territory['tax_construction'] =$tax_row['tax_construction'];
                     $territory['tax_rehab'] = $tax_row['tax_rehab'];

@@ -6,8 +6,8 @@ function get_table_data() {
     $("#table_territorials tbody").find("tr").each(function () {
         var $l_input = $(this).find(".label_input");
             table_values.push({
-                id: $l_input.attr('value'),
-                territory:  $l_input.text(),
+                territory_id: $l_input.attr('value'),
+                territory_name:  $l_input.text(),
                 tax_rehab: $(this).find(".tax_rehab_input").val(),
                 tax_construction: $(this).find(".tax_cons_input").val(),
                 tax_demolition: null
