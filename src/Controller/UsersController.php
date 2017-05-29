@@ -58,12 +58,6 @@ class UsersController extends AppController
 
     public function login()
     {
-
-        //insert models for test purposes
-        $this->loadModel('Domains');
-
-        echo json_encode($this->Domains->getStudiesRules(1));
-
         /*---------------------------------*/
         $user = $this->Auth->user();
 

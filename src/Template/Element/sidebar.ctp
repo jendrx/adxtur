@@ -1,4 +1,4 @@
-<nav  class="col-md-3">
+<nav  class="col-md-5">
 
 	<ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>

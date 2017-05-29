@@ -47,11 +47,13 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
      */
     public function view($id = null)
     {
+        $this->loadModel('Studies');
         $studiesRulesTerritoriesDomain = $this->StudiesRulesTerritoriesDomains->get($id, [
             'contain' => ['Studies', 'TerritoriesDomains', 'Rules']
         ]);
+        //$studiesRulesTerritoriesDomain = $this->StudiesRulesTerritoriesDomains->newEntity();
 
-        $this->set('studiesRulesTerritoriesDomain', $studiesRulesTerritoriesDomain);
+        $this->set(compact('studiesRulesTerritoriesDomain'));
         $this->set('_serialize', ['studiesRulesTerritoriesDomain']);
     }
 
@@ -78,7 +80,6 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
 
             $toSave = array();
             $data = $this->request->getData();
-            $saved = true;
             foreach ($data as $key=>$value)
             {
                 foreach ($value as $k=>$v)

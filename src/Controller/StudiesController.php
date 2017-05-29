@@ -1,8 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Controller\AppController;
-
 /**
  * Studies Controller
  *
@@ -73,38 +71,65 @@ class StudiesController extends AppController
      */
     public function add($domain_id = null)
     {
-        $this->loadModel('TerritoriesDomains');
-        $this->loadModel('Rules');
-        $this->loadModel('Scenarios');
 
-        $proj_years = $this->Scenarios->find('list',['keyField' => 'projection_years','valueField' => 'projection_years','conditions' => ['domain_id = ' => $domain_id]]);
-
-
-        if ($domain_id == null || empty($proj_years->toArray()))
-        {
-            $this->Flash->error(__('There is no associated domain or scenario.'));
-            return $this->redirect(['controller' => 'Domains','action' => 'index']);
+        if ($domain_id === null) {
+            $this->Flash->error(__('There is no associated domain.'));
+            return $this->redirect(['controller' => 'Domains', 'action' => 'index']);
         }
 
-        $study = $this->Studies->newEntity();
+        $this->loadModel('Scenarios');
+        $proj_years = $this->Scenarios->getProjectionYearsList($domain_id);
 
+        if (empty($proj_years->toArray())) {
+            $this->Flash->error(__('There is no associated scenario.'));
+            return $this->redirect(['controller' => 'Domains', 'action' => 'index']);
+        }
+
+        $this->loadModel('Domains');
+        $this->loadModel('TerritoriesDomains');
+        $this->loadModel('Rules');
+        $this->loadModel('StudiesRulesTerritoriesDomains');
+
+        $territories = $this->Domains->getTerritories($domain_id, ['dicofre', 'name']);
+        $rules = $this->Rules->getAllRules();
+
+
+        $study = $this->Studies->newEntity();
         if ($this->request->is('post')) {
 
+            //$data = $this->request->getData();
             $study->domain_id = $domain_id;
             $study = $this->Studies->patchEntity($study, $this->request->getData());
 
-            if ($this->Studies->save($study)) {
-                $this->Flash->success(__('The study has been saved.'));
-                return $this->redirect(['controller'=>'StudiesRulesTerritoriesDomains' ,'action' => 'add',$study->id]);
+            if ($this->Studies->save($study, ['checkRules' => true])) {
+
+                /*$toSave = array();
+                foreach ($data['StudiesRulesTerritoriesDomains'] as $key => $value) {
+
+                    foreach ($value as $rule => $value) {
+
+                        $studyRuleTerritorialDomain = $this->StudiesRulesTerritoriesDomains->newEntity();
+                        $studyRuleTerritorialDomain->study_id = $study->id;
+                        $studyRuleTerritorialDomain->territory_domain_id = $key;
+                        $studyRuleTerritorialDomain->rule_id = $rule;
+                        $studyRuleTerritorialDomain->value = $value;
+
+                        array_push($toSave,$studyRuleTerritorialDomain);
+                    }
+
+                }*/
+
+
+                    $this->Flash->success(__('The study has been saved.'));
+                    return $this->redirect(['controller' => 'StudiesRulesTerritoriesDomains', 'action' => 'add', $study->id]);
+
             }
             $this->Flash->error(__('The study could not be saved. Please, try again.'));
+
         }
 
-
-
-
-        $this->set(compact('study','proj_years'));
-        $this->set('_serialize', ['study','proj_years']);
+        $this->set(compact('study', 'proj_years', 'rules', 'territories'));
+        $this->set('_serialize', ['proj_years', 'rules', 'territories']);
     }
 
     /**

@@ -86,4 +86,11 @@ class ScenariosTable extends Table
 
         return $rules;
     }
+
+    // $id --> domain_id
+    public function getProjectionYearsList($id)
+    {
+        $proj_years = $this->find('list',['keyField' => 'projection_years','valueField' => 'projection_years','conditions' => ['domain_id = ' => $id]]);
+        return $proj_years;
+    }
 }
