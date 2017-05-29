@@ -76,4 +76,12 @@ class RulesTable extends Table
 
         return $validator;
     }
+
+
+    public function getRule($id)
+    {
+        $rule = $this->get($id);
+
+        return $rule;
+    }
 }

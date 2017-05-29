@@ -86,6 +86,7 @@ class HomesController extends AppController
 //            ->contain(['TerritoriesDomains' => ['Territories' => ['conditions' => $conditions ,'fields' => ['id','name']]]]);
 
         $study_taxes = array();
+
         $response = $this->StudiesTerritoriesDomains->getTaxesbyStudy($study_id,$this->Studies->getTerritories($study_id));
         $this->set(compact('response'));
         $this->set('_serialize',['response']);
@@ -100,23 +101,6 @@ class HomesController extends AppController
 
 
         return $territories;
-
-    }
-
-    public function getCentroid($id = null)
-    {
-        $conn = ConnectionManager::get('default');
-
-        $stmt = $conn->prepare('Select row_to_json(row) as centroid  from 
-                                      (Select ST_X(centroid) as lon, ST_Y(centroid) as lat  From  ( Select ST_Centroid( ST_UNION(
-		(SELECT ARRAY(select geom from territories_domains inner join territories on territories.id = territory_id where domain_id =:d_id)))) as centroid) p) row');
-
-        $stmt->bindValue('d_id',$id,'integer');
-
-        $stmt->execute();
-        $row = $stmt->fetch('assoc')['centroid'];
-
-        return $row;
 
     }
 
