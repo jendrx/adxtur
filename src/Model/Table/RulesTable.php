@@ -84,4 +84,17 @@ class RulesTable extends Table
 
         return $rule;
     }
+
+    public function getAllRules($options = null)
+    {
+
+        $rules = array();
+        if ($options !== null)
+        {
+            $rules = $this->find('all',['fields' => $options]);
+            return $rules;
+        }
+        $rules = $this->find('all');
+        return $rules;
+    }
 }

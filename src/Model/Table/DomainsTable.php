@@ -111,7 +111,7 @@ class DomainsTable extends Table
             $domain = $this->get($id, ['contain' => ['Territories' =>['fields' => $fields]]]);
         }
 
-        echo json_encode( $domain['territories']);
+        return json_encode( $domain['territories']);
     }
 
     public function getStudies($id = null)
@@ -143,6 +143,12 @@ class DomainsTable extends Table
 
         return $row;
 
+    }
+
+
+    public function getStudiesRules($id = null)
+    {
+        return $this->getTerritories($id,['name','dicofre']);
     }
 
 }

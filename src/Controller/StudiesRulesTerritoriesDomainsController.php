@@ -141,7 +141,7 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
 
         $rules = $this->StudiesRulesTerritoriesDomains->Rules->find('all');
         $this->set(compact('territories', 'rules'));
-        $this->set('_serialize', ['studiesRulesTerritoriesDomain']);
+        $this->set('_serialize', ['territories','rules']);
     }
 
     public function getStudiesTerritoriesResults($territory_domain,$study_id,$rules,$threshold)
