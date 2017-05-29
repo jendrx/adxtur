@@ -71,6 +71,7 @@ class UsersController extends AppController
             $this->Flash->error(__('Invalid username or password, try again'));
         }
 
+
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }

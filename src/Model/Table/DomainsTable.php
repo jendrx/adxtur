@@ -6,6 +6,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
+use Cake\Datasource\ConnectionManager;
 
 /**
  * Domains Model
@@ -126,4 +127,5 @@ class DomainsTable extends Table
         $domain =$this->get($id,['contain' =>['Scenarios']]);
         return $domain['scenarios'];
     }
+
 }

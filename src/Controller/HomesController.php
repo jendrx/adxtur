@@ -47,7 +47,10 @@ class HomesController extends AppController
         $territories = $this->getTerritories($id, count($current_domain->types));
         $scenarios = $this->Domains->Scenarios->find('list',['field' => ['id','name'],'conditions' => ['domain_id' => $id]]);
         $studies = $this->Domains->Studies->find('list',['field' => ['id','name'],'conditions' => ['domain_id' => $id]]);
-        $start_view = $this->getCentroid($id);
+
+
+
+        $start_view = $this->Domains->getCentroid($id);
 
 
         $this->set(compact('current_domain','studies','scenarios','territories','start_view'));
