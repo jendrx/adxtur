@@ -20,6 +20,12 @@ class UsersTable extends Table
         parent::initialize($config);
         $this->setTable('users');
         $this->setPrimaryKey('id');
+
+        $this->belongsToMany('Studies', [
+            'foreignKey' => 'user_id',
+            'targetForeignKey' => 'study_id',
+            'joinTable' => 'users_studies'
+        ]);
     }
 
     public function validationDefault(Validator $validator)

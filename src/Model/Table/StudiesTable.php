@@ -49,6 +49,12 @@ class StudiesTable extends Table
             'targetForeignKey' => 'territory_domain_id',
             'joinTable' => 'studies_territories_domains' // change to joinTable to test -- 26/05/2017
         ]);
+
+        $this->belongsToMany('Users', [
+            'foreignKey' => 'study_id',
+            'targetForeignKey' => 'user_id',
+            'joinTable' => 'users_studies'
+        ]);
     }
 
     /**
