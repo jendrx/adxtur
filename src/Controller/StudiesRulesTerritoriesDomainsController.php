@@ -187,7 +187,6 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
     public function updateTaxes()
     {
         $message = 'This request is not available';
-
         if($this->request->is(['ajax','post','put']))
         {
             $toSave = array();
@@ -226,7 +225,5 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
 
         $this->set(compact('message'));
         $this->set('_serialize',['message']);
-
-
     }
 }
