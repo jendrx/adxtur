@@ -94,5 +94,12 @@ class TerritoriesDomainsTable extends Table
         return $rules;
     }
 
+    public function getDicofre($id = null)
+    {
+        $territory = $this->get($id,['contain' => ['Territories' => ['fields' => ['dicofre']]]]);
+
+        return $territory['dicofre'];
+    }
+
 
 }

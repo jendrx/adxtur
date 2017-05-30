@@ -59,16 +59,20 @@ class ScenariosTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->allowEmpty('name');
+            ->requirePresence('name')
+            ->notEmpty('name','Name is required!');
 
         $validator
             ->allowEmpty('description');
 
         $validator
-            ->allowEmpty('projection_years');
+            ->requirePresence('projection_years')
+            ->notEmpty('projection_years','Projection Years is required!');
 
         $validator
-            ->allowEmpty('actual_year');
+            ->integer('actual_year')
+            ->requirePresence('actual_year')
+            ->notEmpty('actual_year','Actual year is required!');
 
         return $validator;
     }

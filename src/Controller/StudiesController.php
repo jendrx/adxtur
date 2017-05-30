@@ -101,7 +101,14 @@ class StudiesController extends AppController
             $study->domain_id = $domain_id;
             $study = $this->Studies->patchEntity($study, $this->request->getData());
 
-            if ($this->Studies->save($study, ['checkRules' => true])) {
+            $errors = $study->getErrors();
+            if($errors)
+            {
+                $this->Flash->error(__('Entity Validation error'));
+                return $this->redirect(['controller' => 'Studies', 'action' => 'add', $domain_id]);
+            }
+
+            if ($this->Studies->save($study)) {
 
                 /*$toSave = array();
                 foreach ($data['StudiesRulesTerritoriesDomains'] as $key => $value) {
@@ -124,7 +131,7 @@ class StudiesController extends AppController
                     return $this->redirect(['controller' => 'StudiesRulesTerritoriesDomains', 'action' => 'add', $study->id]);
 
             }
-            $this->Flash->error(__('The study could not be saved. Please, try again.'));
+            //$this->Flash->error(__('The study could not be saved. Please, try again.'));
 
         }
 

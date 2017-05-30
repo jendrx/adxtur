@@ -5,7 +5,7 @@
 ?>
 
 <div class="row-fluid">
-    <?= $this->Form->create('Studies') ?>
+    <?= $this->Form->create() ?>
 	<legend><?= __('Add Study') ?></legend>
 	<div class="col-md-7 well">
 		<div class="row">
@@ -19,7 +19,6 @@
 				<?=$this->Form->control('actual_year',['type' => 'number', 'value' => '2011', 'readonly' => true])?>
 			</div>
 			<div class="col-md-3">
-
 				<?=$this->Form->control('projection_years',['type' => 'select', 'value' => '29','options' => $proj_years, 'style' => 'height:auto'])?>
 			</div>
 		</div>

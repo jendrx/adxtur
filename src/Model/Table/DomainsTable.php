@@ -84,14 +84,10 @@ class DomainsTable extends Table
             ->allowEmpty('description');
 
         $validator
-            ->integer('actual_year')
-            ->requirePresence('actual_year', 'create')
-            ->notEmpty('actual_year');
+            ->integer('actual_year');
 
         $validator
-            ->integer('projection_year')
-            ->requirePresence('projection_year', 'create')
-            ->notEmpty('projection_year');
+            ->integer('projection_year');
 
         $validator
             ->integer('type')

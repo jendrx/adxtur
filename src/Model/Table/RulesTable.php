@@ -97,4 +97,5 @@ class RulesTable extends Table
         $rules = $this->find('all');
         return $rules;
     }
+
 }

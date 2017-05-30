@@ -60,21 +60,27 @@ class StudiesTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->allowEmpty('id', 'create');
+            ->allowEmpty('id','create');
 
         $validator
-            ->allowEmpty('name');
+            ->add('name', 'notEmpty', [
+                'rule' => 'notEmpty',
+                'message' => __('You need to provide a title'),]);
+            //->requirePresence('name','create')
+            //->notEmpty('name','Name is required!');
 
         $validator
             ->allowEmpty('description');
 
         $validator
-            ->integer('actual_year')
-            ->allowEmpty('actual_year');
+            ->integer('actual_year','create')
+            ->requirePresence('actual_year','create')
+            ->notEmpty('actual_year','Year is required!','create');
 
         $validator
             ->integer('projection_years')
-            ->allowEmpty('projection_years');
+            ->requirePresence('projection_years','create')
+            ->notEmpty('projection_years','Projection Years is required!','create');
 
         return $validator;
     }

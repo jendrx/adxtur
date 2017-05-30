@@ -85,4 +85,12 @@ class StudiesRulesTerritoriesDomainsTable extends Table
 
         return $rules;
     }
+
+
+    public function getTerritoryRules($territory = null, $study = null)
+    {
+        $territory_rules = $this->find('all',['conditions' => ['study_id = ' => $study, 'territory_domain_id' => $territory]])->select(['rule_id','value']);
+
+        return $territory_rules;
+    }
 }
