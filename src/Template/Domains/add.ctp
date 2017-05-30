@@ -95,7 +95,7 @@
 
         $(".pointer").click(function () {
             $header = $(this);
-            console.log($header);
+            //console.log($header);
             //getting the next element
 
             $content = $header.closest('li').next();
@@ -110,7 +110,7 @@
 
         $(".munLabel").click(function () {
             $header = $(this);
-            console.log($header);
+            //console.log($header);
             //getting the next element
 
             $content = $header.closest('li').next();
