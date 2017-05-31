@@ -41,8 +41,7 @@ class HomesController extends AppController
         $this->viewBuilder()->setLayout('homeLayout');
         $this->loadModel('Domains');
 
-        // get domains by user list
-        $domains = array();
+
         if ($user['role'] === 'admin')
             $domains = $this->Domains->find('all');
         else
@@ -64,16 +63,7 @@ class HomesController extends AppController
         $current_domain = $this->Domains->get($id, array('contain' => array('Studies','Scenarios','Features','Types')));
         $territories = $this->getTerritories($id, count($current_domain->types));
         $scenarios = $this->Domains->Scenarios->find('list',['field' => ['id','name'],'conditions' => ['domain_id' => $id]]);
-
-        //if ($user['role'] === 'admin')
-        //{
-            $studies = $this->Domains->Studies->find('list',['field' => ['id','name'],'conditions' => ['domain_id' => $id]]);
-        //}
-        //else
-        //{
-        //    $studies = $this->Domains->Studies->getUserStudiesList($id,$user['id']);
-        //}
-
+        $studies = $this->Domains->Studies->find('list',['field' => ['id','name'],'conditions' => ['domain_id' => $id]]);
 
 
         $start_view = $this->Domains->getCentroid($id);
