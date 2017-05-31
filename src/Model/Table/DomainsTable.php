@@ -1,12 +1,9 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
+use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\ORM\TableRegistry;
-use Cake\Datasource\ConnectionManager;
 
 /**
  * Domains Model
@@ -63,6 +60,12 @@ class DomainsTable extends Table
             'targetForeignKey' => 'type_id',
             'joinTable' => 'types_domains'
         ]);
+
+        $this->belongsToMany('Users', [
+            'foreignKey' => 'domain_id',
+            'targetForeignKey' => 'user_id',
+            'joinTable' => 'users_domains'
+        ]);
     }
 
     /**
@@ -97,14 +100,13 @@ class DomainsTable extends Table
     }
 
 
-    public function getTerritories($id = null,$fields = null)
+    public function getTerritories($id = null, $fields = null)
     {
         if ($fields === null) {
             $domain = $this->get($id, ['contain' => ['Territories']]);
-        }
-        else{
-            array_push($fields,'TerritoriesDomains.domain_id');
-            $domain = $this->get($id, ['contain' => ['Territories' =>['fields' => $fields]]]);
+        } else {
+            array_push($fields, 'TerritoriesDomains.domain_id');
+            $domain = $this->get($id, ['contain' => ['Territories' => ['fields' => $fields]]]);
         }
 
         return $domain['territories'];
@@ -113,14 +115,14 @@ class DomainsTable extends Table
     public function getStudies($id = null)
     {
 
-        $domain =$this->get($id,['contain' =>['Studies']]);
+        $domain = $this->get($id, ['contain' => ['Studies']]);
         return $domain['studies'];
 
     }
 
     public function getScenarios($id = null)
     {
-        $domain =$this->get($id,['contain' =>['Scenarios']]);
+        $domain = $this->get($id, ['contain' => ['Scenarios']]);
         return $domain['scenarios'];
     }
 
@@ -132,7 +134,7 @@ class DomainsTable extends Table
                                       (Select ST_X(centroid) as lon, ST_Y(centroid) as lat  From  ( Select ST_Centroid( ST_UNION(
 		(SELECT ARRAY(select geom from territories_domains inner join territories on territories.id = territory_id where domain_id =:d_id)))) as centroid) p) row');
 
-        $stmt->bindValue('d_id',$id,'integer');
+        $stmt->bindValue('d_id', $id, 'integer');
 
         $stmt->execute();
         $row = $stmt->fetch('assoc')['centroid'];
@@ -140,5 +142,41 @@ class DomainsTable extends Table
         return $row;
 
     }
+
+    public function getDomainsByUser($user = null)
+    {
+        $domains = $this->find('all')->join(['table' => 'users_domains', 'conditions' => ['users_domains.domain_id = Domains.id']])
+                                     ->join(['table' => 'Users', 'conditions' => ['users_domains.user_id = Users.id', 'Users.id' => $user]]);
+
+        return $domains;
+    }
+
+//    public function getUserStudiesDomains($user = null)
+//    {
+//
+//        $domains = $this->find('all')->join(['table' => 'Studies', 'conditions' => ['Studies.domain_id = Domains.id']])
+//            ->join(['table' => 'users_studies','conditions' => ['users_studies.study_id = Studies.id']])
+//            ->join(['table' => 'Users','conditions' => ['users_studies.user_id =  Users.id' , 'Users.id = ' => $user]]);
+//
+//        return $domains;
+//    }
+//
+
+//    public function thereIsUserStudy($domain = null, $user = null )
+//    {
+//        $exists = true;
+//
+//        $domains = $this->find('all',['conditions' => ['Domains.id = ' => $domain]] )
+//            ->join(['table' => 'Studies', 'conditions' => ['Studies.domain_id = Domains.id']])
+//            ->join(['table' => 'users_studies','conditions' => ['users_studies.study_id = Studies.id']])
+//            ->join(['table' => 'Users','conditions' => ['users_studies.user_id =  Users.id' , 'Users.id = ' => $user]]);
+//
+//        if(empty($domains->toArray()))
+//        {
+//            $exists = false;
+//        }
+//        return $exists;
+//    }
+
 
 }

@@ -49,12 +49,6 @@ class StudiesTable extends Table
             'targetForeignKey' => 'territory_domain_id',
             'joinTable' => 'studies_territories_domains' // change to joinTable to test -- 26/05/2017
         ]);
-
-        $this->belongsToMany('Users', [
-            'foreignKey' => 'study_id',
-            'targetForeignKey' => 'user_id',
-            'joinTable' => 'users_studies'
-        ]);
     }
 
     /**
@@ -169,5 +163,16 @@ class StudiesTable extends Table
 
         return array_column($territories->toArray(),'territory_domain_id');
     }
+
+//    public function getUserStudiesList($domain = null, $user = null)
+//    {
+//        $list = $this->find('list',['conditions' => ['Studies.domain_id = ' => $domain]])
+//                        ->join(['table' =>'users_studies', 'conditions' =>['Studies.id = users_studies.study_id']])
+//                        ->join(['table' => 'Users', 'conditions' => ['Users.id = users_studies.user_id', 'Users.id = ' => $user ]]);
+//
+//        return $list;
+//    }
+
+
 
 }

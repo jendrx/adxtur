@@ -58,6 +58,14 @@ class UsersController extends AppController
 
     public function login()
     {
+
+//        $this->loadModel('UsersDomains');
+//        echo json_encode($this->UsersDomains->isOwnedBy(116,2));
+
+        $this->loadModel('Domains');
+//
+        echo json_encode($this->Domains->getDomainsByUser(2));
+
         /*---------------------------------*/
         $user = $this->Auth->user();
 

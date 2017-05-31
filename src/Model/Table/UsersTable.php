@@ -21,10 +21,10 @@ class UsersTable extends Table
         $this->setTable('users');
         $this->setPrimaryKey('id');
 
-        $this->belongsToMany('Studies', [
+        $this->belongsToMany('Domains', [
             'foreignKey' => 'user_id',
-            'targetForeignKey' => 'study_id',
-            'joinTable' => 'users_studies'
+            'targetForeignKey' => 'domain_id',
+            'joinTable' => 'users_domains'
         ]);
     }
 
