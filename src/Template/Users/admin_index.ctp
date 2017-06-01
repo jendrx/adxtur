@@ -21,11 +21,13 @@
                     <tr>
                         <td><?= $this->Number->format($user->id) ?></td>
                         <td><?= h($user->username) ?></td>
-                        <td><?= $user->has('created') ? $domain->created->i18nFormat('dd-MM-yyyy, HH:MM') : 'undefined' ?></td>
+                        <td><?= h($user->role) ?></td>
+                        <td><?= $user->has('created') ? $user->created : 'undefined' ?></td>
+
                         <td class="actions">
-                            <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
-                            <!--<?= $this->Html->link(__('Edit'), ['action' => 'edit', $domain->id]) ?>-->
-                            <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $domain->id)]) ?>
+                            <?= $this->Html->link(__('View'), ['action' => 'adminView', $user->id]) ?>
+                            <!--<?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>-->
+                            <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

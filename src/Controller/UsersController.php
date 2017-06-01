@@ -23,7 +23,7 @@ class UsersController extends AppController
     public function isAuthorized($user)
     {
         // Admin can access every action
-        if (in_array($this->request->getParam('action'), ['index', 'add','login','logout'])) {
+        if (in_array($this->request->getParam('action'), ['index', 'add', 'login', 'logout'])) {
             return true;
         }
 
@@ -31,13 +31,53 @@ class UsersController extends AppController
     }
 
 
-    public function admin_index()
+
+    //admin functions
+    public function adminIndex()
     {
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
-        $this->set('_serialize',['users']);
+        $this->set('_serialize', ['users']);
     }
+
+
+    public function adminView($id = null)
+    {
+        $user = $this->Users->get($id,['contain' => ['Domains']]);
+
+        $this->set(compact('user'));
+        $this->set('_serialize',['user']);
+    }
+
+    public function adminEdit($id = null)
+    {
+        $user = $this->Users->get($id);
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+
+            $data = $this->request->getData();
+
+            echo json_encode($data);
+            $data['role'];
+
+            $user = $user->set('role',$data['role']);
+
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+
+                return $this->redirect(['action' => 'admin_view',$user->id]);
+            }
+            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+        }
+        $this->set(compact('user'));
+        $this->set('_serialize', ['domain']);
+
+    }
+
+
+
+    // user_functions
     public function index()
     {
         $this->set('users', $this->Users->find('all'));
@@ -54,6 +94,7 @@ class UsersController extends AppController
         $user = $this->Users->newEntity();
         $this->viewBuilder()->setLayout('unloggedLayout');
         if ($this->request->is('post')) {
+            $user->set('role','disabled');
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));

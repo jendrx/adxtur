@@ -26,6 +26,8 @@ class UsersTable extends Table
             'targetForeignKey' => 'domain_id',
             'joinTable' => 'users_domains'
         ]);
+
+        $this->addBehavior('Timestamp');
     }
 
     public function validationDefault(Validator $validator)
@@ -54,6 +56,12 @@ class UsersTable extends Table
     {
         $userList = $this->find('list',['keyField' => 'Users.id', 'valueField' => 'username','conditions' => ['role = ' => 'disabled']]);
         return $userList;
+    }
+
+    public function getRolesList()
+    {
+        $roles = $this->find('list');
+        return $roles;
     }
 
 }
