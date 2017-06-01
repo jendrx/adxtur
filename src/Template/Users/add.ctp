@@ -11,6 +11,6 @@
         ]) ?>-->
 
     </fieldset>
-    <?= $this->Form->button(__('Submit')); ?>
+    <?= $this->Form->button(__('Submit'),['class'=>'button']); ?>
     <?= $this->Form->end() ?>
 </div>

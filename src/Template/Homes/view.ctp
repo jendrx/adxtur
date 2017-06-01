@@ -11,7 +11,7 @@
 <div class="col-md-3">
 	<div class="row">
 		<div class="">
-		<div class="table-responsive">
+		<div class="table-responsive"  style="height: 700px;" >
 			<table class="table" id="table_territorials">
 			</table>
 		</div>
