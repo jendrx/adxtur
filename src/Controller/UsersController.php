@@ -45,11 +45,12 @@ class UsersController extends AppController
     public function add()
     {
         $user = $this->Users->newEntity();
+        $this->viewBuilder()->setLayout('unloggedLayout');
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
-                return $this->redirect(['action' => 'add']);
+                return $this->redirect(['action' => 'login']);
             }
             $this->Flash->error(__('Unable to add the user.'));
         }

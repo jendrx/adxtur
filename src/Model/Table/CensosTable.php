@@ -276,7 +276,6 @@ class CensosTable extends Table
         return $query->toArray()[0]->empty_rehab_lodges;
     }
 
-
     public function getLodgesDistribution()
     {
         $rulesTable = TableRegistry::get('Rules');
@@ -293,34 +292,57 @@ class CensosTable extends Table
     public function getTerritoryCensosResults($dicofre = null, $projection_years = null, $rules = null, $threshold = null)
     {
 
+
         $actual_lodges =  $this->getActualLodges($dicofre);
         $desertion_tax = $this->getDesertionTax($dicofre,$rules);
         $predicted_lodges = $actual_lodges - $desertion_tax;
-        $tax_anual_desertion = pow(($predicted_lodges / $actual_lodges),(1/$projection_years)) - 1;
+        $tax_anual_desertion = 0;
+        $tax_actual_first_lodges = 0;
+        $tax_actual_second_lodges = 0;
+        $empty_lodges = 0;
+        $tax_actual_empty_lodges = 0;
 
-        $tax_actual_first_lodges = $this->getFirstLodges($dicofre) / $actual_lodges;
-        $tax_actual_second_lodges = $this->getSecondLodges($dicofre) / $actual_lodges;
+        if($actual_lodges !== 0)
+        {
+            $tax_anual_desertion = pow(($predicted_lodges / $actual_lodges),(1/$projection_years)) - 1;
+            $tax_actual_first_lodges = $this->getFirstLodges($dicofre) / $actual_lodges;
+            $tax_actual_second_lodges = $this->getSecondLodges($dicofre) / $actual_lodges;
+            $empty_lodges =  $this->getEmptyLodges($dicofre);
+            $tax_actual_empty_lodges = $empty_lodges/ $actual_lodges;
+        }
 
-        $empty_lodges =  $this->getEmptyLodges($dicofre);
-        $tax_actual_empty_lodges = $empty_lodges/ $actual_lodges;
         $total_actual_empty_lodges = $predicted_lodges * $tax_actual_empty_lodges;
-
         $at_market_lodges = $this->getEmptySaleLodges($dicofre) + $this->getEmptyLoanLodges($dicofre)
             - ($this->getSomeEmptySaleLodges($dicofre,$threshold) + $this->getSomeEmptyLoanLodges($dicofre,$threshold));
+
         $rehab_lodges = ($this->getEmptyDemolishedLodges($dicofre)
                 + $this->getEmptyOtherLodges($dicofre)) + $this->getSomeEmptyLoanLodges($dicofre,$threshold) + $this->getSomeEmptySaleLodges($dicofre,$threshold) ;
 
-        $weight_at_market = $at_market_lodges / ($at_market_lodges + $rehab_lodges);
-        $weight_rehab = $rehab_lodges / ($at_market_lodges + $rehab_lodges);
+        $weight_at_market = 0;
+        $weight_rehab = 0;
+        if($at_market_lodges !== 0)
+        {
+            $weight_at_market = $at_market_lodges / ($at_market_lodges + $rehab_lodges);
+        }
+
+
+        if($rehab_lodges !== 0)
+        {
+            $weight_rehab = $rehab_lodges / ($at_market_lodges + $rehab_lodges);
+        }
+
 
         $total_actual_empty_avail_lodges = $total_actual_empty_lodges * $weight_at_market;
         $total_actual_empty_rehab_lodges = $total_actual_empty_lodges * $weight_rehab;
 
-        return array('actual_lodges' => $actual_lodges,'tax_anual_desertion' => $tax_anual_desertion,'tax_actual_first_lodges' => $tax_actual_first_lodges,
+        $results = array('actual_lodges' => $actual_lodges,'tax_anual_desertion' => $tax_anual_desertion,'tax_actual_first_lodges' => $tax_actual_first_lodges,
             'tax_actual_second_lodges' => $tax_actual_second_lodges, 'tax_actual_empty_lodges' => $tax_actual_empty_lodges, 'total_actual_empty_lodges' => $total_actual_empty_lodges,
             'total_actual_empty_avail_lodges' => $total_actual_empty_avail_lodges, 'total_actual_empty_rehab_lodges' => $total_actual_empty_rehab_lodges,
             'dicofre' => $dicofre);
 
+
+
+        return $results;
     }
 
     public function getDesertionTax($dicofre = null, $rules = null)

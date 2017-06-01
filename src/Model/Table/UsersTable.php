@@ -32,12 +32,28 @@ class UsersTable extends Table
     {
         return $validator
             ->notEmpty('username', 'A username is required')
+            ->minLength('username',3,'Username must have at least three characters')
             ->notEmpty('password', 'A password is required')
+            ->minLength('password',3,'Password must have at least three characters')
+            ->sameAs('repass','password','Password mismatch')
             ->notEmpty('role', 'A role is required')
             ->add('role', 'inList', [
                 'rule' => ['inList', ['admin', 'user','disabled']],
                 'message' => 'Please enter a valid role'
             ]);
+    }
+
+
+    public function getList()
+    {
+        $userList = $this->find('list',['keyField' => 'Users.id', 'valueField' => 'username']);
+        return $userList;
+    }
+
+    public function getInactiveList()
+    {
+        $userList = $this->find('list',['keyField' => 'Users.id', 'valueField' => 'username','conditions' => ['role = ' => 'disabled']]);
+        return $userList;
     }
 
 }
