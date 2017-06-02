@@ -10,6 +10,46 @@ use App\Controller\AppController;
  */
 class DomainsController extends AppController
 {
+
+    public function admin_index()
+    {
+        $domains = $this->paginate($this->Domains);
+        $this->set(compact('domains'));
+        $this->set('_serialize', ['domains']);
+    }
+
+    public function admin_view($id = null)
+    {
+        $domain = $this->Domains->get($id, [
+            'contain' => ['Features', 'Territories', 'Types', 'Scenarios', 'Studies']
+        ]);
+
+        $this->set('domain',$domain);
+        $this->set('_serialize', ['domain']);
+    }
+
+    public function admin_edit($id = null)
+    {
+        $domain = $this->Domains->get($id, [
+            'contain' => ['Features', 'Territories', 'Types']
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $domain = $this->Domains->patchEntity($domain, $this->request->getData());
+            if ($this->Domains->save($domain)) {
+                $this->Flash->success(__('The domain has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The domain could not be saved. Please, try again.'));
+        }
+        $features = $this->Domains->Features->find('list', ['limit' => 200]);
+        $territories = $this->Domains->Territories->find('list', ['limit' => 200]);
+        $types = $this->Domains->Types->find('list', ['limit' => 200]);
+        $this->set(compact('domain', 'features', 'territories', 'types'));
+        $this->set('_serialize', ['domain']);
+    }
+
+
     /**
      * Index method
      *
