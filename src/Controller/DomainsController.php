@@ -49,6 +49,19 @@ class DomainsController extends AppController
         $this->set('_serialize', ['domain']);
     }
 
+    public function admin_delete($id = null)
+    {
+        $this->request->allowMethod(['post', 'delete']);
+        $domain = $this->Domains->get($id);
+        if ($this->Domains->delete($domain)) {
+            $this->Flash->success(__('The domain has been deleted.'));
+        } else {
+            $this->Flash->error(__('The domain could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'admin_view', $id]);
+    }
+
 
     /**
      * Index method

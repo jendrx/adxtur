@@ -30,9 +30,9 @@
                         <td><?= $this->Number->format($domain->projection_year) ?></td>
                         <td><?= $domain->has('created') ? $domain->created->i18nFormat('dd-MM-yyyy, HH:MM') : 'undefined' ?></td>
                         <td class="actions">
-                            <?= $this->Html->link(__('View'), ['action' => 'view', $domain->id]) ?>
-                            <!--<?= $this->Html->link(__('Edit'), ['action' => 'edit', $domain->id]) ?>-->
-                            <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $domain->id], ['confirm' => __('Are you sure you want to delete # {0}?', $domain->id)]) ?>
+                            <?= $this->Html->link(__('View'), ['action' => 'admin_view', $domain->id]) ?>
+                            <!--<?= $this->Html->link(__('Edit'), ['action' => 'admin_edit', $domain->id]) ?>-->
+                            <?= $this->Form->postLink(__('Delete'), ['action' => 'admin_delete', $domain->id], ['confirm' => __('Are you sure you want to delete # {0}?', $domain->id)]) ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

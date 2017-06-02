@@ -92,9 +92,9 @@
                                     <tr>
                                         <td><?= h($studies->name) ?></td>
                                         <td class="actions">
-                                            <?= $this->Html->link(__('View'), ['controller' => 'Studies', 'action' => 'view', $studies->id]) ?>
-                                            <!--<?= $this->Html->link(__('Edit'), ['controller' => 'Studies', 'action' => 'edit', $studies->id]) ?>-->
-                                            <?= $this->Form->postLink(__('Delete'), ['controller' => 'Studies', 'action' => 'delete', $studies->id], ['confirm' => __('Are you sure you want to delete # {0}?', $studies->id)]) ?>
+                                            <?= $this->Html->link(__('View'), ['controller' => 'Studies', 'action' => 'admin_view', $studies->id]) ?>
+                                            <!--<?= $this->Html->link(__('Edit'), ['controller' => 'Studies', 'action' => 'admin_edit', $studies->id]) ?>-->
+                                            <?= $this->Form->postLink(__('Delete'), ['controller' => 'Studies', 'action' => 'admin_delete', $studies->id], ['confirm' => __('Are you sure you want to delete # {0}?', $studies->id)]) ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -104,7 +104,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="panel-footer">
-                    <?php echo $this->Html->link('New Study', ['controller' => 'Studies', 'action' => 'add', $domain->id], array('class' => 'button')) ?>
+                    <?php echo $this->Html->link('New Study', ['controller' => 'Studies', 'action' => 'admin_add', $domain->id], array('class' => 'button')) ?>
                 </div>
 
             </div>
@@ -136,9 +136,9 @@
                                         <!--<td><?= h($scenarios->description) ?></td>
 								<td><?= h($scenarios->domain_id) ?></td>-->
                                         <td class="actions">
-                                            <?= $this->Html->link(__('View'), ['controller' => 'Scenarios', 'action' => 'view', $scenarios->id]) ?>
-                                            <!--<?= $this->Html->link(__('Edit'), ['controller' => 'Scenarios', 'action' => 'edit', $scenarios->id]) ?>-->
-                                            <?= $this->Form->postLink(__('Delete'), ['controller' => 'Scenarios', 'action' => 'delete', $scenarios->id], ['confirm' => __('Are you sure you want to delete # {0}?', $scenarios->id)]) ?>
+                                            <?= $this->Html->link(__('View'), ['controller' => 'Scenarios', 'action' => 'admin_view', $scenarios->id]) ?>
+                                            <!--<?= $this->Html->link(__('Edit'), ['controller' => 'Scenarios', 'action' => 'admin_edit', $scenarios->id]) ?>-->
+                                            <?= $this->Form->postLink(__('Delete'), ['controller' => 'Scenarios', 'action' => 'admin_delete', $scenarios->id], ['confirm' => __('Are you sure you want to delete # {0}?', $scenarios->id)]) ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -148,7 +148,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="panel-footer">
-                    <?php echo $this->Html->link('New Scenario', ['controller' => 'Scenarios', 'action' => 'add', $domain->id], array('class' => 'button')) ?>
+                    <?php echo $this->Html->link('New Scenario', ['controller' => 'Scenarios', 'action' => 'admin_add', $domain->id], array('class' => 'button')) ?>
                 </div>
             </div>
         </div>
