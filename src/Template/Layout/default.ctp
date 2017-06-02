@@ -37,12 +37,12 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
 		<div class="row-fluid">
             <?= $this->Flash->render() ?>
-			<div class="col-md-2">
+			<div class="col-md-3">
                 <?= $this->element('sidebar') ?>
 			</div>
 
 
-			<div class="col-md-10">
+			<div class="col-md-9">
                 <?= $this->fetch('content') ?>
 			</div>
 

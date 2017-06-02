@@ -18,20 +18,29 @@ class UsersDomainsController extends AppController
      */
 
 
-    public function adminAdd()
+    public function adminAdd($user = null)
     {
+
         $usersDomain = $this->UsersDomains->newEntity();
         if ($this->request->is('post')) {
-            $usersDomain = $this->UsersDomains->patchEntity($usersDomain, $this->request->getData());
+
+            $data = $this->request->getData();
+
+            $usersDomain->set('user_id',$user);
+            $usersDomain = $this->UsersDomains->patchEntity($usersDomain,$data);
+
             if ($this->UsersDomains->save($usersDomain)) {
                 $this->Flash->success(__('The users domain has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['controller' => 'Users','action' => 'admin_view',$user]);
             }
             $this->Flash->error(__('The users domain could not be saved. Please, try again.'));
         }
-        $users = $this->UsersDomains->Users->find('list', ['limit' => 200]);
-        $domains = $this->UsersDomains->Domains->find('list', ['limit' => 200]);
+        $users = $this->UsersDomains->Users->get($user);
+
+        //$domains = $this->UsersDomains->Domains->find('list', ['limit' => 200]);
+        $domains = $this->UsersDomains->Domains->getNotOwnedDomainsList($user);
+
         $this->set(compact('usersDomain', 'users', 'domains'));
         $this->set('_serialize', ['usersDomain']);
     }

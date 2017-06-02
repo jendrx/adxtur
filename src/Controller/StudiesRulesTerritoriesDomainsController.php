@@ -61,6 +61,8 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
      */
     public function add($study_id = null)
     {
+
+        $this->viewBuilder()->setLayout('homeLayout');
         $threshold = 6;
 
         $this->loadModel('Censos');
@@ -123,7 +125,84 @@ class StudiesRulesTerritoriesDomainsController extends AppController{
                 $entities = $this->StudiesTerritoriesDomains->saveMany($toSave);
                 if($entities)
                 {
-                    return $this->redirect(['controller' => 'homes','action' => 'index']);
+                    return $this->redirect(['controller' => 'homes','action' => 'view',$domain_id]);
+                }
+            }
+
+            $this->Flash->error(__('The studies rules territories domain could not be saved. Please, try again.'));
+        }
+
+        $rules = $this->StudiesRulesTerritoriesDomains->Rules->find('all');
+        $this->set(compact('studiesRulesTerritoriesDomains','territories', 'rules'));
+        $this->set('_serialize', ['studiesRulesTerritoriesDomains','territories','rules']);
+    }
+
+
+    public function adminAdd($study_id = null)
+    {
+        $threshold = 6;
+
+        $this->loadModel('Censos');
+        $this->loadModel('TerritoriesDomains');
+        $this->loadModel('StudiesTerritoriesDomains');
+
+        $study_info = $this->StudiesRulesTerritoriesDomains->Studies->get($study_id);
+        $domain_id = $study_info->domain_id;
+
+        $territories = $this->StudiesRulesTerritoriesDomains->TerritoriesDomains->find('all', ['conditions' => ['domain_id = ' => $domain_id]])
+            ->contain(['Territories' => ['fields' => ['name', 'dicofre']]]);
+
+        $studiesRulesTerritoriesDomains = $this->StudiesRulesTerritoriesDomains->newEntity();
+        if ($this->request->is('post')) {
+
+            $toSave = array();
+            $data = $this->request->getData();
+
+            foreach ($data as $entity)
+            {
+                foreach ($entity as $row)
+                {
+                    $studiesRulesTerritoriesDomains = $this->StudiesRulesTerritoriesDomains->newEntity();
+                    $studiesRulesTerritoriesDomains->set('study_id',$study_id);
+                    $this->StudiesRulesTerritoriesDomains->patchEntity($studiesRulesTerritoriesDomains,$row);
+                    array_push($toSave,$studiesRulesTerritoriesDomains);
+                }
+            }
+
+            if($this->StudiesRulesTerritoriesDomains->saveMany($toSave))
+            {
+                $this->Flash->success(__('The studies rules territories domain has been saved.'));
+                $toSave = array();
+
+                foreach($territories as $territory)
+                {
+                    $studiesTerritoriesDomain = $this->StudiesTerritoriesDomains->newEntity();
+                    $territory_domain_id = $territory['id'];
+                    $dicofre = $territory['territory']['dicofre'];
+
+                    $rules = $this->StudiesRulesTerritoriesDomains->getTerritoryRules($territory_domain_id,$study_id);
+
+
+                    $results = $this->Censos->getTerritoryCensosResults($dicofre,$study_info->projection_years,$rules,$threshold);
+                    $studiesTerritoriesDomain->set('actual_lodges',$results['actual_lodges']);
+                    $studiesTerritoriesDomain->set('tax_anual_desertion',$results['tax_anual_desertion']);
+                    $studiesTerritoriesDomain->set('tax_actual_first_lodges',$results['tax_actual_first_lodges']);
+                    $studiesTerritoriesDomain->set('tax_actual_second_lodges',$results['tax_actual_second_lodges']);
+                    $studiesTerritoriesDomain->set('tax_actual_empty_lodges',$results['tax_actual_empty_lodges']);
+                    $studiesTerritoriesDomain->set('total_actual_empty_lodges',$results['total_actual_empty_lodges']);
+                    $studiesTerritoriesDomain->set('total_actual_empty_avail_lodges',$results['total_actual_empty_avail_lodges']);
+                    $studiesTerritoriesDomain->set('total_actual_empty_rehab_lodges',$results['total_actual_empty_rehab_lodges']);
+                    $studiesTerritoriesDomain->set('study_id',$study_id);
+                    $studiesTerritoriesDomain->set('territory_domain_id',$territory_domain_id);
+
+
+                    array_push($toSave,$studiesTerritoriesDomain);
+                }
+
+                $entities = $this->StudiesTerritoriesDomains->saveMany($toSave);
+                if($entities)
+                {
+                    return $this->redirect(['controller' => 'Domains','action' => 'view',$domain_id]);
                 }
             }
 

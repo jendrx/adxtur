@@ -31,7 +31,6 @@ class UsersController extends AppController
     }
 
 
-
     //admin functions
     public function adminIndex()
     {
@@ -41,13 +40,12 @@ class UsersController extends AppController
         $this->set('_serialize', ['users']);
     }
 
-
     public function adminView($id = null)
     {
-        $user = $this->Users->get($id,['contain' => ['Domains']]);
+        $user = $this->Users->get($id, ['contain' => ['Domains']]);
 
         $this->set(compact('user'));
-        $this->set('_serialize',['user']);
+        $this->set('_serialize', ['user']);
     }
 
     public function adminEdit($id = null)
@@ -61,12 +59,12 @@ class UsersController extends AppController
             echo json_encode($data);
             $data['role'];
 
-            $user = $user->set('role',$data['role']);
+            $user = $user->set('role', $data['role']);
 
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 
-                return $this->redirect(['action' => 'admin_view',$user->id]);
+                return $this->redirect(['action' => 'admin_view', $user->id]);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
@@ -74,8 +72,6 @@ class UsersController extends AppController
         $this->set('_serialize', ['domain']);
 
     }
-
-
 
     // user_functions
     public function index()
@@ -94,7 +90,7 @@ class UsersController extends AppController
         $user = $this->Users->newEntity();
         $this->viewBuilder()->setLayout('unloggedLayout');
         if ($this->request->is('post')) {
-            $user->set('role','disabled');
+            $user->set('role', 'disabled');
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
@@ -107,6 +103,10 @@ class UsersController extends AppController
 
     public function login()
     {
+
+        $this->loadModel('Domains');
+
+        echo json_encode($this->Domains->getNotOwnedDomainsList(2));
 
         /*---------------------------------*/
         $user = $this->Auth->user();

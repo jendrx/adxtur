@@ -3,6 +3,7 @@ namespace App\Model\Table;
 
 use Cake\Datasource\ConnectionManager;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -178,5 +179,28 @@ class DomainsTable extends Table
 //        return $exists;
 //    }
 
+
+    public function getNotOwnedDomains($user = null)
+    {
+        $usersDomainsTable = TableRegistry::get('UsersDomains');
+
+        $nestedQuery = $usersDomainsTable->find('all',['conditions' => ['user_id' => $user]])->select('domain_id');
+
+        $notOwnedDomainsList = $this->find('all',['conditions' => ['Domains.id not in ' => $nestedQuery]]);
+
+        return $notOwnedDomainsList;
+    }
+
+    public function getNotOwnedDomainsList($user = null)
+    {
+        $usersDomainsTable = TableRegistry::get('UsersDomains');
+
+
+        $nestedQuery = $usersDomainsTable->find('all',['conditions' => ['user_id' => $user]])->select('domain_id');
+
+        $notOwnedDomainsList = $this->find('list',['conditions' => ['Domains.id not in ' => $nestedQuery]]);
+
+        return $notOwnedDomainsList;
+    }
 
 }

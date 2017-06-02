@@ -6,5 +6,6 @@
         <li><?= $this->Html->link(__('List Domains'), ['controller' =>'domains','action' => 'index']) ?></li>
 	    <li><?= $this->Html->link(__('List Studies'), ['controller' => 'Studies', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('List Scenarios'), ['controller' => 'Scenarios', 'action' => 'index']) ?></li>
+		<li><?= $this->Html->link(__('List Users'),['controller' => 'Users','action' => 'admin_index' ])?></li>
     </ul>
 </nav>

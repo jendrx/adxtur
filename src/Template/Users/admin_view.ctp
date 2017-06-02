@@ -64,13 +64,12 @@
                             </tbody>
                         </table>
                         <?php  endif;?>
+                        <?php echo $this->Html->link('Add Domain', ['controller' => 'users_domains', 'action' => 'admin_add', $user->id], array('class' => 'button')) ?>
                     </div>
                 </div>
             </div>
         </div>
 
     </div>
-
-    <?php  echo json_encode($user)?>
 </div>
 </div>

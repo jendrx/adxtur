@@ -72,10 +72,12 @@ class StudiesController extends AppController
     public function add($domain_id = null)
     {
 
+        $this->viewBuilder()->setLayout('homeLayout');
         if ($domain_id === null) {
             $this->Flash->error(__('There is no associated domain.'));
             return $this->redirect(['controller' => 'Domains', 'action' => 'index']);
         }
+
 
         $this->loadModel('Scenarios');
         $proj_years = $this->Scenarios->getProjectionYearsList($domain_id);
@@ -129,6 +131,60 @@ class StudiesController extends AppController
 
                     $this->Flash->success(__('The study has been saved.'));
                     return $this->redirect(['controller' => 'StudiesRulesTerritoriesDomains', 'action' => 'add', $study->id]);
+
+            }
+            //$this->Flash->error(__('The study could not be saved. Please, try again.'));
+
+        }
+
+        $this->set(compact('study', 'proj_years', 'rules', 'territories'));
+        $this->set('_serialize', ['proj_years', 'rules', 'territories']);
+    }
+
+
+    public function adminAdd($domain_id = null)
+    {
+
+        if ($domain_id === null) {
+            $this->Flash->error(__('There is no associated domain.'));
+            return $this->redirect(['controller' => 'Domains', 'action' => 'index']);
+        }
+
+        $this->loadModel('Scenarios');
+        $proj_years = $this->Scenarios->getProjectionYearsList($domain_id);
+
+        if (empty($proj_years->toArray())) {
+            $this->Flash->error(__('There is no associated scenario.'));
+            return $this->redirect(['controller' => 'Domains', 'action' => 'index']);
+        }
+
+        $this->loadModel('Domains');
+        $this->loadModel('TerritoriesDomains');
+        $this->loadModel('Rules');
+        $this->loadModel('StudiesRulesTerritoriesDomains');
+
+        $territories = $this->Domains->getTerritories($domain_id, ['dicofre', 'name']);
+        $rules = $this->Rules->getAllRules();
+
+
+        $study = $this->Studies->newEntity();
+        if ($this->request->is('post')) {
+
+            //$data = $this->request->getData();
+            $study->domain_id = $domain_id;
+            $study = $this->Studies->patchEntity($study, $this->request->getData());
+
+            $errors = $study->getErrors();
+            if($errors)
+            {
+                $this->Flash->error(__('Entity Validation error'));
+                return $this->redirect(['controller' => 'Studies', 'action' => 'add', $domain_id]);
+            }
+
+            if ($this->Studies->save($study)) {
+
+                $this->Flash->success(__('The study has been saved.'));
+                return $this->redirect(['controller' => 'StudiesRulesTerritoriesDomains', 'action' => 'admin_add', $study->id]);
 
             }
             //$this->Flash->error(__('The study could not be saved. Please, try again.'));
