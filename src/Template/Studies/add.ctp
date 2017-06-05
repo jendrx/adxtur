@@ -4,7 +4,7 @@
   */
 ?>
 
-<div class="row-fluid">
+<div class="container">
     <?= $this->Form->create() ?>
 	<legend><?= __('Add Study') ?></legend>
 	<div class="col-md-7 well">

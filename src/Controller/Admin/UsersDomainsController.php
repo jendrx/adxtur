@@ -68,4 +68,7 @@ class UsersDomainsController extends  AppController
         return $this->redirect(['controller' => 'Users','action' => 'view',$usersDomain['user_id']]);
     }
 
+
+
+
 }

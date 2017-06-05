@@ -54,6 +54,4 @@ class UsersController extends AppController
         $this->set('_serialize', ['domain']);
 
     }
-
-
 }
