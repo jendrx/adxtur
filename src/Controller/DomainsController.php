@@ -17,7 +17,6 @@ class DomainsController extends AppController
      */
 
 
-
     public function index()
     {
         $domains = $this->paginate($this->Domains);
