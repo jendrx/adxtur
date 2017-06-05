@@ -1,5 +1,13 @@
 <?php
 /**
+ * Created by PhpStorm.
+ * User: rom
+ * Date: 6/5/17
+ * Time: 11:21 AM
+ */?>
+
+<?php
+/**
  * @var \App\View\AppView $this
  */
 ?>
@@ -23,15 +31,15 @@
                 <?php foreach ($studies as $study): ?>
                     <tr>
                         <td><?= $this->Number->format($study->id) ?></td>
-                        <td><?= $study->has('domain') ? $this->Html->link($study->domain->name, ['controller' => 'Domains', 'action' => 'admin_view', $study->domain->id]) : '' ?></td>
+                        <td><?= $study->has('domain') ? $this->Html->link($study->domain->name, ['controller' => 'Domains', 'action' => 'view', $study->domain->id]) : '' ?></td>
                         <td><?= $study->name ?></td>
                         <td><?= $study->has('actual_year') ? h($study->actual_year) : 'undefined' ?></td>
                         <td><?= $this->Number->format($study->projection_years) ?></td>
                         <td><?= $study->has('created') ? $study->created->i18nFormat('dd-MM-yyyy, HH:MM') : 'undefined' ?></td>
                         <td class="actions">
-                            <?= $this->Html->link(__('View'), ['action' => 'admin_view', $study->id]) ?>
+                            <?= $this->Html->link(__('View'), ['action' => 'view', $study->id]) ?>
                             <!--<?= $this->Html->link(__('Edit'), ['action' => 'edit', $study->id]) ?>-->
-                            <?= $this->Form->postLink(__('Delete'), ['action' => 'admin_delete', $study->id], ['confirm' => __('Are you sure you want to delete # {0}?', $study->id)]) ?>
+                            <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $study->id], ['confirm' => __('Are you sure you want to delete # {0}?', $study->id)]) ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -50,3 +58,4 @@
         </div>
     </div>
 </div>
+
