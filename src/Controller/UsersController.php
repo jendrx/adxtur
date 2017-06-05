@@ -30,49 +30,6 @@ class UsersController extends AppController
         return parent::isAuthorized($user);
     }
 
-
-    //admin functions
-    public function adminIndex()
-    {
-        $users = $this->paginate($this->Users);
-
-        $this->set(compact('users'));
-        $this->set('_serialize', ['users']);
-    }
-
-    public function adminView($id = null)
-    {
-        $user = $this->Users->get($id, ['contain' => ['Domains']]);
-
-        $this->set(compact('user'));
-        $this->set('_serialize', ['user']);
-    }
-
-    public function adminEdit($id = null)
-    {
-        $user = $this->Users->get($id);
-
-        if ($this->request->is(['patch', 'post', 'put'])) {
-
-            $data = $this->request->getData();
-
-            echo json_encode($data);
-            $data['role'];
-
-            $user = $user->set('role', $data['role']);
-
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'admin_view', $user->id]);
-            }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
-        }
-        $this->set(compact('user'));
-        $this->set('_serialize', ['domain']);
-
-    }
-
     // user_functions
     public function index()
     {
@@ -103,11 +60,6 @@ class UsersController extends AppController
 
     public function login()
     {
-
-        $this->loadModel('Domains');
-
-        echo json_encode($this->Domains->getNotOwnedDomainsList(2));
-
         /*---------------------------------*/
         $user = $this->Auth->user();
 

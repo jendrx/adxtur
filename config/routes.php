@@ -82,7 +82,7 @@ Router::scope('/', function (RouteBuilder $routes) {
 Router::prefix('admin', function (RouteBuilder $routes)
 {
 
-    $routes->connect('/domains/index',['controller' => 'domains', 'action' => 'index']);
+    //$routes->connect('/domains/index',['controller' => 'domains', 'action' => 'index']);
     $routes->fallbacks(DashedRoute::class);
 
 });
