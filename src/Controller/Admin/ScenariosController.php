@@ -1,21 +1,19 @@
 <?php
-namespace App\Controller;
+/**
+ * Created by PhpStorm.
+ * User: rom
+ * Date: 6/5/17
+ * Time: 10:39 AM
+ */
+
+namespace App\Controller\Admin;
+
 
 use App\Controller\AppController;
 
-/**
- * Scenarios Controller
- *
- * @property \App\Model\Table\ScenariosTable $Scenarios
- */
 class ScenariosController extends AppController
 {
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
     public function index()
     {
         $this->paginate = [
@@ -27,13 +25,6 @@ class ScenariosController extends AppController
         $this->set('_serialize', ['scenarios']);
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Scenario id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function view($id = null)
     {
         $scenario = $this->Scenarios->get($id, [
@@ -44,11 +35,6 @@ class ScenariosController extends AppController
         $this->set('_serialize', ['scenario']);
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
-     */
     public function add($domain_id = null)
     {
         $this->loadModel('TerritoriesDomains');
@@ -74,13 +60,6 @@ class ScenariosController extends AppController
         $this->set('_serialize', ['scenario']);
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Scenario id.
-     * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null)
     {
         $scenario = $this->Scenarios->get($id, [
@@ -101,13 +80,6 @@ class ScenariosController extends AppController
         $this->set('_serialize', ['scenario']);
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Scenario id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -120,4 +92,6 @@ class ScenariosController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+
 }
