@@ -23,8 +23,8 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body style="height:100%">
 <div id ="wrap" style="min-height:100%;">
 	<?php
-    if ($user):
-        if ($user['role'] === 'admin'):
+    if ($auth_user):
+        if ($auth_user['role'] === 'admin'):
             echo $this->element('admin_header');
         else:
             echo $this->element('header');
