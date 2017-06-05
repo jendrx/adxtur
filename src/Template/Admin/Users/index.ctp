@@ -1,5 +1,10 @@
 <?php
-?>
+/**
+ * Created by PhpStorm.
+ * User: rom
+ * Date: 6/5/17
+ * Time: 12:17 PM
+ */?>
 
 <div class="row">
     <h3><?= __('Users') ?></h3>
@@ -25,7 +30,7 @@
                         <td><?= $user->has('created') ? $user->created : 'undefined' ?></td>
 
                         <td class="actions">
-                            <?= $this->Html->link(__('View'), ['action' => 'adminView', $user->id]) ?>
+                            <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
                             <!--<?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>-->
                             <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
                         </td>

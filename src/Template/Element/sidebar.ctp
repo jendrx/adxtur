@@ -6,6 +6,6 @@
         <li><?= $this->Html->link(__('List Domains'), ['controller' =>'domains','action' => 'index','prefix' => 'admin' ]) ?></li>
 	    <li><?= $this->Html->link(__('List Studies'), ['controller' => 'Studies', 'action' => 'index', 'prefix' => 'admin']) ?></li>
         <li><?= $this->Html->link(__('List Scenarios'), ['controller' => 'Scenarios', 'action' => 'index', 'prefix' => 'admin']) ?></li>
-		<li><?= $this->Html->link(__('List Users'),['controller' => 'Users','action' => 'admin_index', 'prefix' => 'admin' ])?></li>
+		<li><?= $this->Html->link(__('List Users'),['controller' => 'Users','action' => 'index', 'prefix' => 'admin' ])?></li>
     </ul>
 </nav>
