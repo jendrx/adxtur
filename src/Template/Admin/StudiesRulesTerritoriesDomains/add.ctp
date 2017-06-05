@@ -1,5 +1,13 @@
 <?php
 /**
+ * Created by PhpStorm.
+ * User: rom
+ * Date: 6/5/17
+ * Time: 11:54 AM
+ */?>
+
+<?php
+/**
  * @var \App\View\AppView $this
  */
 ?>
@@ -43,3 +51,4 @@
     </div>
 
 </div>
+
