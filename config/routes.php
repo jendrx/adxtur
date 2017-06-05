@@ -49,14 +49,15 @@ Router::scope('/', function (RouteBuilder $routes) {
      * its action called 'display', and we pass a param to select the view file
      * to use (in this case, src/Template/Pages/home.ctp)...
      */
-    //$routes->extensions(['csv','json', 'xml']);
+
     $routes->extensions(['json', 'xml']);
-    $routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+
+    $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
 
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
-    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+    //$routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
     /**
      * Connect catchall routes for all controllers.
@@ -75,6 +76,15 @@ Router::scope('/', function (RouteBuilder $routes) {
      * routes you want in your application.
      */
     $routes->fallbacks(DashedRoute::class);
+});
+
+
+Router::prefix('admin', function (RouteBuilder $routes)
+{
+
+    $routes->connect('/domains/index',['controller' => 'domains', 'action' => 'index']);
+    $routes->fallbacks(DashedRoute::class);
+
 });
 
 /**

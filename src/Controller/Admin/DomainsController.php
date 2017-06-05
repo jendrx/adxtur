@@ -1,22 +1,18 @@
 <?php
-namespace App\Controller;
+
+/**
+ * Created by PhpStorm.
+ * User: rom
+ * Date: 6/2/17
+ * Time: 4:51 PM
+ */
+
+namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 
-/**
- * Domains Controller
- *
- * @property \App\Model\Table\DomainsTable $Domains
- */
 class DomainsController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
-
-
 
     public function index()
     {
@@ -25,28 +21,6 @@ class DomainsController extends AppController
         $this->set('_serialize', ['domains']);
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Domain id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $domain = $this->Domains->get($id, [
-            'contain' => ['Features', 'Territories', 'Types', 'Scenarios', 'Studies']
-        ]);
-
-        $this->set('domain',$domain);
-        $this->set('_serialize', ['domain']);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
-     */
     public function add()
     {
         $this->loadModel('Types');
@@ -95,41 +69,16 @@ class DomainsController extends AppController
 
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Domain id.
-     * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    public function edit($id = null)
+    public function view($id = null)
     {
         $domain = $this->Domains->get($id, [
-            'contain' => ['Features', 'Territories', 'Types']
+            'contain' => ['Features', 'Territories', 'Types', 'Scenarios', 'Studies']
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $domain = $this->Domains->patchEntity($domain, $this->request->getData());
-            if ($this->Domains->save($domain)) {
-                $this->Flash->success(__('The domain has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The domain could not be saved. Please, try again.'));
-        }
-        $features = $this->Domains->Features->find('list', ['limit' => 200]);
-        $territories = $this->Domains->Territories->find('list', ['limit' => 200]);
-        $types = $this->Domains->Types->find('list', ['limit' => 200]);
-        $this->set(compact('domain', 'features', 'territories', 'types'));
+        $this->set('domain',$domain);
         $this->set('_serialize', ['domain']);
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Domain id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -140,7 +89,7 @@ class DomainsController extends AppController
             $this->Flash->error(__('The domain could not be deleted. Please, try again.'));
         }
 
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['controller' => 'domains','action' => 'index']);
     }
 
     public function getTypes($id = null)
